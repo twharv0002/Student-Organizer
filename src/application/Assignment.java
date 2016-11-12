@@ -16,7 +16,6 @@ public class Assignment {
 	private boolean isComplete;
 	private String className;
 	private String type;
-	//private int daysUntil;
 	
 	public Assignment(String name, Date date, String info, double grade, boolean isComplete, String className, String type){
 		this.name = name;
@@ -26,7 +25,6 @@ public class Assignment {
 		this.isComplete = isComplete;
 		this.className = className;
 		this.type = type;
-		//daysUntil = getDaysUntil();
 	}
 	
 	public Assignment(String name, Date date, String info, double grade, boolean isComplete, String className, String type, int id){
@@ -38,7 +36,6 @@ public class Assignment {
 		this.className = className;
 		this.type = type;
 		this.id = id;
-		//daysUntil = getDaysUntil();
 	}
 	
 	public int getDaysUntil(){
