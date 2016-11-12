@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="courseTabPage" prefHeight="646.0" prefWidth="972.0" stylesheets="@application/StudentOrganizer.css" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.CourseViewController">
+   <children>
+      <VBox layoutX="14.0" layoutY="14.0" prefHeight="646.0" prefWidth="979.0" style="-fx-background-color: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Pane prefHeight="36.0" prefWidth="972.0" style="-fx-background-color: white;" VBox.vgrow="NEVER">
+               <effect>
+                  <InnerShadow choke="0.87" height="17.89" radius="9.2225" />
+               </effect>
+            </Pane>
+            <HBox prefHeight="619.0" prefWidth="972.0" styleClass="backgroundImage" stylesheets="@application/StudentOrganizer.css" VBox.vgrow="ALWAYS">
+               <children>
+                  <VBox prefHeight="597.0" prefWidth="218.0" HBox.hgrow="NEVER">
+                     <children>
+                        <Pane prefHeight="55.0" prefWidth="215.0" style="-fx-border-color: black; -fx-background-color: gray;">
+                           <children>
+                              <Label layoutX="76.0" layoutY="14.0" text="Courses">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <effect>
+                              <InnerShadow choke="0.68" />
+                           </effect>
+                        </Pane>
+                        <ListView fx:id="courseListView" prefHeight="542.0" prefWidth="213.0" VBox.vgrow="ALWAYS">
+                           <VBox.margin>
+                              <Insets bottom="5.0" left="5.0" />
+                           </VBox.margin>
+                           <effect>
+                              <InnerShadow />
+                           </effect>
+                        </ListView>
+                     </children>
+                  </VBox>
+                  <Accordion prefHeight="602.0" prefWidth="750.0" HBox.hgrow="ALWAYS">
+                    <panes>
+                        <TitledPane expanded="false" text="Course Management">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <VBox layoutX="14.0" layoutY="14.0" prefHeight="552.0" prefWidth="748.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <children>
+                                          <AnchorPane>
+                                             <children>
+                                                <Button fx:id="clearButton" mnemonicParsing="false" onAction="#onClearButtonClick" text="Clear" />
+                                             </children>
+                                          </AnchorPane>
+                                          <Separator prefWidth="200.0" />
+                                          <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                             <children>
+                                                <TextField fx:id="courseNameLabel" layoutX="77.0" layoutY="20.0" prefHeight="31.0" prefWidth="177.0" />
+                                                <Label layoutX="14.0" layoutY="26.0" text="Name:" />
+                                                <TextField fx:id="teacherLabel" layoutX="77.0" layoutY="78.0" prefHeight="31.0" prefWidth="177.0" />
+                                                <Label layoutX="14.0" layoutY="84.0" text="Teacher:" />
+                                                <TextField fx:id="courseTimeLabel" layoutX="77.0" layoutY="138.0" prefHeight="31.0" prefWidth="140.0" />
+                                                <Label layoutX="14.0" layoutY="144.0" text="Time:" />
+                                                <TextField fx:id="courseRoomLabel" layoutX="362.0" layoutY="20.0" prefHeight="31.0" prefWidth="104.0" />
+                                                <Label layoutX="285.0" layoutY="25.0" text="Room:" />
+                                                <TextField fx:id="courseAbsencesLabel" layoutX="362.0" layoutY="78.0" prefHeight="31.0" prefWidth="104.0" />
+                                                <Label layoutX="285.0" layoutY="83.0" text="Absences:" />
+                                             </children>
+                                          </AnchorPane>
+                                          <Separator prefWidth="200.0" />
+                                          <AnchorPane prefHeight="242.0" prefWidth="724.0">
+                                             <children>
+                                                <TextField fx:id="hwWeightLabel" alignment="CENTER" layoutX="118.0" layoutY="56.0" prefHeight="31.0" prefWidth="66.0" text="0" />
+                                                <Label layoutX="31.0" layoutY="62.0" text="Homework:" />
+                                                <TextField fx:id="quizWeightLabel" alignment="CENTER" layoutX="118.0" layoutY="114.0" prefHeight="31.0" prefWidth="66.0" text="0" />
+                                                <Label layoutX="31.0" layoutY="120.0" text="Quiz:" />
+                                                <TextField fx:id="labWeightLabel" alignment="CENTER" layoutX="118.0" layoutY="174.0" prefHeight="31.0" prefWidth="66.0" text="0" />
+                                                <Label layoutX="31.0" layoutY="180.0" text="Lab:" />
+                                                <TextField fx:id="testWeightLabel" alignment="CENTER" layoutX="311.0" layoutY="57.0" prefHeight="31.0" prefWidth="66.0" text="0" />
+                                                <Label layoutX="263.0" layoutY="62.0" text="Test:" />
+                                                <TextField fx:id="finalWeightLabel" alignment="CENTER" layoutX="311.0" layoutY="114.0" prefHeight="31.0" prefWidth="66.0" text="0" />
+                                                <Label layoutX="263.0" layoutY="119.0" text="Final:" />
+                                                <TextField fx:id="paperWeightLabel" alignment="CENTER" layoutX="312.0" layoutY="174.0" prefHeight="31.0" prefWidth="66.0" text="0" />
+                                                <Label layoutX="263.0" layoutY="179.0" text="Paper:" />
+                                                <TextField fx:id="projectWeightLabel" alignment="CENTER" layoutX="535.0" layoutY="55.0" prefHeight="31.0" prefWidth="66.0" text="0" />
+                                                <Label layoutX="451.0" layoutY="61.0" text="Project:" />
+                                                <TextField fx:id="discussionWeightLabel" alignment="CENTER" layoutX="535.0" layoutY="113.0" prefHeight="31.0" prefWidth="66.0" text="0" />
+                                                <Label layoutX="451.0" layoutY="119.0" text="Discussion:" />
+                                                <Label layoutX="307.0" layoutY="14.0" text="Weights" />
+                                                <Label layoutX="197.0" layoutY="62.0" text="\%" />
+                                                <Label layoutX="197.0" layoutY="120.0" text="\%" />
+                                                <Label layoutX="197.0" layoutY="179.0" text="\%" />
+                                                <Label layoutX="394.0" layoutY="60.0" text="\%" />
+                                                <Label layoutX="394.0" layoutY="118.0" text="\%" />
+                                                <Label layoutX="394.0" layoutY="177.0" text="\%" />
+                                                <Label layoutX="626.0" layoutY="61.0" text="\%" />
+                                                <Label layoutX="626.0" layoutY="119.0" text="\%" />
+                                                <TextField fx:id="attendanceWeightLabel" alignment="CENTER" layoutX="535.0" layoutY="171.0" prefHeight="31.0" prefWidth="66.0" text="0" />
+                                                <Label layoutX="451.0" layoutY="177.0" text="Attendance:" />
+                                                <Label layoutX="626.0" layoutY="177.0" text="\%" />
+                                             </children>
+                                          </AnchorPane>
+                                          <Separator prefWidth="200.0" />
+                                          <AnchorPane prefHeight="56.0" prefWidth="724.0">
+                                             <children>
+                                                <Button fx:id="addButton" layoutX="494.0" layoutY="13.0" mnemonicParsing="false" onAction="#onAddButtonClick" text="Add" />
+                                                <Button fx:id="deleteButton" layoutX="633.0" layoutY="13.0" mnemonicParsing="false" onAction="#onDeleteButtonClick" text="Delete" />
+                                                <Button fx:id="updateButton" layoutX="555.0" layoutY="13.0" mnemonicParsing="false" onAction="#onUpdateButtonClick" text="Update" />
+                                             </children>
+                                          </AnchorPane>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </TitledPane>
+                      <TitledPane prefHeight="588.0" prefWidth="750.0" text="Course Information">
+                        <content>
+                              <HBox prefHeight="546.0" prefWidth="748.0" style="-fx-background-color: black;">
+                                 <children>
+                                    <AnchorPane prefHeight="542.0" prefWidth="268.0">
+                                       <children>
+                                          <Pane layoutY="55.0" prefHeight="474.0" prefWidth="259.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="55.0">
+                                             <children>
+                                                <Label layoutX="14.0" layoutY="17.0" text="Name:">
+                                                   <font>
+                                                      <Font name="System Bold" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label fx:id="nameLabel" layoutX="74.0" layoutY="17.0" prefHeight="25.0" prefWidth="176.0" wrapText="true">
+                                                   <font>
+                                                      <Font size="16.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label layoutX="14.0" layoutY="94.0" text="Instructor:">
+                                                   <font>
+                                                      <Font name="System Bold" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label fx:id="instructorLabel" layoutX="99.0" layoutY="94.0" prefHeight="25.0" prefWidth="144.0" wrapText="true">
+                                                   <font>
+                                                      <Font size="16.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label layoutX="14.0" layoutY="168.0" text="Time:">
+                                                   <font>
+                                                      <Font name="System Bold" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label fx:id="timeLabel" layoutX="85.0" layoutY="168.0" prefHeight="25.0" prefWidth="158.0" wrapText="true">
+                                                   <font>
+                                                      <Font size="16.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label layoutX="14.0" layoutY="248.0" text="Absences:">
+                                                   <font>
+                                                      <Font name="System Bold" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label fx:id="absencesLabel" layoutX="94.0" layoutY="248.0" prefHeight="25.0" prefWidth="73.0" wrapText="true">
+                                                   <font>
+                                                      <Font size="16.0" />
+                                                   </font>
+                                                </Label>
+                                                <Separator layoutY="46.0" prefHeight="13.0" prefWidth="231.0">
+                                                   <effect>
+                                                      <Glow />
+                                                   </effect>
+                                                </Separator>
+                                                <Separator layoutY="132.0" prefHeight="13.0" prefWidth="231.0">
+                                                   <effect>
+                                                      <Glow />
+                                                   </effect>
+                                                </Separator>
+                                                <Separator layoutX="4.0" layoutY="204.0" prefHeight="13.0" prefWidth="231.0">
+                                                   <effect>
+                                                      <Glow />
+                                                   </effect>
+                                                </Separator>
+                                                <Separator layoutY="294.0" prefHeight="13.0" prefWidth="231.0">
+                                                   <effect>
+                                                      <Glow />
+                                                   </effect>
+                                                </Separator>
+                                                <Label layoutX="18.0" layoutY="333.0" text="Room #:">
+                                                   <font>
+                                                      <Font name="System Bold" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label fx:id="roomLabel" layoutX="98.0" layoutY="333.0" prefHeight="25.0" prefWidth="73.0" wrapText="true">
+                                                   <font>
+                                                      <Font size="16.0" />
+                                                   </font>
+                                                </Label>
+                                                <Separator layoutX="4.0" layoutY="385.0" prefHeight="13.0" prefWidth="231.0">
+                                                   <effect>
+                                                      <Glow />
+                                                   </effect>
+                                                </Separator>
+                                             </children>
+                                             <effect>
+                                                <InnerShadow />
+                                             </effect>
+                                          </Pane>
+                                          <Pane prefHeight="55.0" prefWidth="260.0" style="-fx-border-color: black; -fx-background-color: gray;">
+                                             <children>
+                                                <Label layoutX="100.0" layoutY="14.0" text="General">
+                                                   <font>
+                                                      <Font name="System Bold" size="18.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                             <effect>
+                                                <InnerShadow />
+                                             </effect>
+                                          </Pane>
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane prefHeight="522.0" prefWidth="477.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <VBox fx:id="progressVBox" layoutX="0.5" prefHeight="540.0" prefWidth="471.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <children>
+                                                <Pane prefHeight="55.0" prefWidth="100.0" style="-fx-border-color: black; -fx-background-color: gray;">
+                                                   <children>
+                                                      <Label layoutX="214.0" layoutY="14.0" text="Progress">
+                                                         <font>
+                                                            <Font name="System Bold" size="18.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children>
+                                                   <effect>
+                                                      <InnerShadow />
+                                                   </effect>
+                                                </Pane>
+                                                <GridPane fx:id="progressGridPane" gridLinesVisible="true" prefHeight="473.0" prefWidth="508.0" style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
+                                                  <columnConstraints>
+                                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                  </columnConstraints>
+                                                  <rowConstraints>
+                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                  </rowConstraints>
+                                                   <effect>
+                                                      <InnerShadow />
+                                                   </effect>
+                                                   <VBox.margin>
+                                                      <Insets bottom="10.0" />
+                                                   </VBox.margin>
+                                                </GridPane>
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </AnchorPane>
+                                 </children>
+                                 <effect>
+                                    <DropShadow />
+                                 </effect>
+                                 <padding>
+                                    <Insets left="5.0" right="5.0" top="10.0" />
+                                 </padding>
+                              </HBox>
+                        </content>
+                      </TitledPane>
+                    </panes>
+                  </Accordion>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
