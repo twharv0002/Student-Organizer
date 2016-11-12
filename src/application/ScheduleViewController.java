@@ -246,7 +246,7 @@ public class ScheduleViewController implements Initializable {
 					.withAppointmentGroup(new Agenda.AppointmentGroupImpl().withStyleClass(rs.getString("style"))));
 		}
 	}
-	// Test for GitHub
+	// Test for GitHub on the small-features branch
 	private void addAppointmentsToData() throws ClassNotFoundException, SQLException {
 		for (int i = 0; i < assignments.size(); i++) {
 			
