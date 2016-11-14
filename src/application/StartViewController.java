@@ -69,6 +69,7 @@ public class StartViewController implements Initializable{
 	
 	DataBase database = new DataBase();
 	private ObservableList<Assignment> data = FXCollections.observableArrayList();
+	ObservableList<Agenda.AppointmentImplLocal> dataSchedule;
 	
 	private List<Course> courseData = new ArrayList<>();
 	private List<Assignment> assignments = new ArrayList<Assignment>();
@@ -89,6 +90,7 @@ public class StartViewController implements Initializable{
 	@FXML Button startSearchButton;
 	@FXML Button upcomingButton;
 	@FXML Button allButton;
+	@FXML Button refreshButton;
 	@FXML CheckBox showCompleteRadioButton;
 	@FXML AnchorPane startPane;
 	@FXML AnchorPane scheduleAnchorPane;
@@ -109,45 +111,9 @@ public class StartViewController implements Initializable{
 		
 	}
 	
-	private void populateSchedule(){
-		ObservableList<Agenda.AppointmentImplLocal> data = FXCollections.observableArrayList();
-		ResultSet rs = null;
-		try {
-			rs = database.getAssignments();
-			
-			while(rs.next()){
-				Assignment assignment = new Assignment(rs.getString("name"), rs.getDate("date"), rs.getString("info"),
-						rs.getDouble("grade"), rs.getBoolean("completed"), rs.getString("class"), rs.getString("type"), rs.getInt("id"));
-				appointments.add(assignment);
-			}
-			
-			for (int i = 0; i < appointments.size(); i++) {
-				
-				data.add(new Agenda.AppointmentImplLocal().withStartLocalDateTime(appointments.get(i).getDate().toLocalDate().atTime(12, 00))
-						.withEndLocalDateTime(appointments.get(i).getDate().toLocalDate().atTime(13, 00))
-						.withDescription(appointments.get(i).getInfo())
-						.withSummary(appointments.get(i).getName())
-						.withWholeDay(true)
-						.withAppointmentGroup(new Agenda.AppointmentGroupImpl().withStyleClass(appointments.get(i).getType())));
-			}
-			
-			rs = database.getAppointments();
-			
-			while(rs.next()){
-				data.add((ModdedAppointment) new ModdedAppointment(rs.getInt("id")).withStartLocalDateTime(LocalDateTime.parse(rs.getString("starttime")))
-						.withEndLocalDateTime(LocalDateTime.parse(rs.getString("endtime")))
-						.withDescription(rs.getString("description"))
-						.withSummary(rs.getString("summary"))
-						.withWholeDay(rs.getBoolean("wholeday"))
-						.withAppointmentGroup(new Agenda.AppointmentGroupImpl().withStyleClass(rs.getString("style"))));
-			}
-			
-			
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	private void populateSchedule() throws ClassNotFoundException, SQLException{
+		dataSchedule = FXCollections.observableArrayList();
+		refreshSchedule();
 		agenda = new Agenda();
 		agenda.setAllowDragging(false);
 		agenda.setAllowResize(false);
@@ -159,8 +125,50 @@ public class StartViewController implements Initializable{
 		AnchorPane.setTopAnchor(agenda, 0.0);
 		AnchorPane.setRightAnchor(agenda, 5.0);
 		AnchorPane.setLeftAnchor(agenda, 5.0);
-		agenda.appointments().addAll(data);
+		agenda.appointments().addAll(dataSchedule);
 		scheduleAnchorPane.getChildren().add(agenda);
+	}
+
+	private void refreshSchedule() throws ClassNotFoundException, SQLException {
+		
+		dataSchedule.clear();
+		appointments.clear();
+		getAssignmentsSchedule();
+		getEventsSchedule();
+	}
+
+	private void getEventsSchedule() throws ClassNotFoundException, SQLException {
+		
+		ResultSet rs = database.getAppointments();
+		
+		while(rs.next()){
+			dataSchedule.add((ModdedAppointment) new ModdedAppointment(rs.getInt("id")).withStartLocalDateTime(LocalDateTime.parse(rs.getString("starttime")))
+					.withEndLocalDateTime(LocalDateTime.parse(rs.getString("endtime")))
+					.withDescription(rs.getString("description"))
+					.withSummary(rs.getString("summary"))
+					.withWholeDay(rs.getBoolean("wholeday"))
+					.withAppointmentGroup(new Agenda.AppointmentGroupImpl().withStyleClass(rs.getString("style"))));
+		}
+	}
+
+	private void getAssignmentsSchedule() throws ClassNotFoundException, SQLException {
+		ResultSet rs = database.getAssignments();
+		
+		while(rs.next()){
+			Assignment assignment = new Assignment(rs.getString("name"), rs.getDate("date"), rs.getString("info"),
+					rs.getDouble("grade"), rs.getBoolean("completed"), rs.getString("class"), rs.getString("type"), rs.getInt("id"));
+			appointments.add(assignment);
+		}
+		
+		for (int i = 0; i < appointments.size(); i++) {
+			
+			dataSchedule.add(new Agenda.AppointmentImplLocal().withStartLocalDateTime(appointments.get(i).getDate().toLocalDate().atTime(12, 00))
+					.withEndLocalDateTime(appointments.get(i).getDate().toLocalDate().atTime(13, 00))
+					.withDescription(appointments.get(i).getInfo())
+					.withSummary(appointments.get(i).getName())
+					.withWholeDay(true)
+					.withAppointmentGroup(new Agenda.AppointmentGroupImpl().withStyleClass(appointments.get(i).getType())));
+		}
 	}
 
 
@@ -184,7 +192,7 @@ public class StartViewController implements Initializable{
 		columnDate.setCellValueFactory(new PropertyValueFactory<Assignment, Date>("date"));
 		columnCourse.setCellValueFactory(new PropertyValueFactory<Assignment, String>("className"));
 		columnDaysUntil.setCellValueFactory(new PropertyValueFactory<Assignment, Integer>("daysUntil"));
-		setDaysUntilColor();
+		//setDaysUntilColor();
 		columnCompleted.setCellValueFactory(new PropertyValueFactory<Assignment, Boolean>("Complete"));
 
 		// Create a checkbox in the completed column
@@ -358,6 +366,20 @@ public class StartViewController implements Initializable{
 		table.getItems().add(assignments.get(i));
 		table.refresh();
 	}
+	
+	@FXML
+	void onRefreshButtonClick(ActionEvent event){
+		try {
+			refreshSchedule();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		agenda.appointments().clear();
+		agenda.appointments().addAll(dataSchedule);
+	}
+	
 	@FXML
 	void onAllButtonClick(ActionEvent event){
 		try {

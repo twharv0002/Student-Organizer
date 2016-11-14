@@ -35,6 +35,7 @@ public class InsertAssignmentController implements Initializable {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		assignmentCompleteLabel.setText("Assignment Inserted");
 		db = new DataBase();
 		ResultSet rs = null;
 		try {
@@ -61,7 +62,14 @@ public class InsertAssignmentController implements Initializable {
 		try {
 			db.insertAssignment(assignment);
 			System.out.println("Assignment Inserted");
-			assignmentCompleteLabel.setText("Assignment Inserted");
+			
+			FadeTransition ft = new FadeTransition(Duration.millis(1100), assignmentCompleteLabel);
+			ft.setFromValue(0);
+			ft.setToValue(1.0);
+			ft.setCycleCount(2);
+			ft.setAutoReverse(true);
+			ft.play();
+			
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {

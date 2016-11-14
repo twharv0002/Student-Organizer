@@ -7,8 +7,10 @@ import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
+import javafx.animation.FadeTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -18,11 +20,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
+import javafx.util.Duration;
 
 public class CourseViewController implements Initializable {
 	
@@ -34,6 +40,7 @@ public class CourseViewController implements Initializable {
 	@FXML Label absencesLabel;
 	@FXML Button clearButton;
 	@FXML Button addButton;
+	@FXML Button refreshButton;
 	@FXML GridPane progressGridPane;
 	@FXML TextField courseNameLabel;
 	@FXML TextField courseTimeLabel;
@@ -49,6 +56,7 @@ public class CourseViewController implements Initializable {
 	@FXML TextField discussionWeightLabel;
 	@FXML TextField attendanceWeightLabel;
 	@FXML TextField projectWeightLabel;
+	@FXML Label updatedLabel;
 	
 	private DataBase database;
 	private ObservableList<Course> name;
@@ -57,7 +65,12 @@ public class CourseViewController implements Initializable {
 	
 	@FXML
 	void onClearButtonClick(ActionEvent event){
-		  courseNameLabel.setText("");
+		  clearFields();
+	}
+	
+	// Clear all text fields
+	private void clearFields() {
+		courseNameLabel.setText("");
 		  courseTimeLabel.setText("");
 		  teacherLabel.setText("");
 		  courseAbsencesLabel.setText("");
@@ -73,41 +86,47 @@ public class CourseViewController implements Initializable {
 		  projectWeightLabel.setText("0");
 	}
 	
+	@FXML 
+	void onRefreshButtonClick(ActionEvent event){
+		
+	}
+	
 	@FXML
 	void onAddButtonClick(ActionEvent event){
 		if(courseNameLabel.getText().equals("")){
-			System.out.println("Future error message");
+			updatedLabel.setText("No input Given");
+			animateUpdateLabel();
 		}
 		else{
-			// CHECK IF COURSE NAME ALREADY EXISTS
-				try {
-					if(database.hasCourse(courseNameLabel.getText())){
-						System.out.println("Course already exists");
+			try {
+				if(database.hasCourse(courseNameLabel.getText())){
+					updatedLabel.setText("Course already exists");
+					animateUpdateLabel();
+				}
+				else{
+					System.out.println("Creating new course");
+					int room = 0;
+					int absences = 0;
+					if(!courseRoomLabel.getText().equals(""))
+						room = Integer.valueOf(courseRoomLabel.getText());
+					if(!courseAbsencesLabel.getText().equals(""))
+						absences = Integer.valueOf(courseAbsencesLabel.getText());
+						
+					Course course = new Course(teacherLabel.getText(), courseNameLabel.getText(), 
+							room, absences, 0, courseTimeLabel.getText());
+					
+					database.insertCourse(course);
+					updatedLabel.setText("Course Added");
+					animateUpdateLabel();
+					List<Double> weights = getLabelWeights();
+					
+					database.insertWeights(weights, courseNameLabel.getText());
+						
+					courseListView.getItems().add(course);
+					courseListView.refresh();
+					courseListView.getSelectionModel().clearAndSelect(courseListView.getItems().size() - 1);
+						
 					}
-					else{
-						System.out.println("Creating new course");
-					// VALIDATE FIELDS
-						int room = 0;
-						int absences = 0;
-						if(!courseRoomLabel.getText().equals(""))
-							room = Integer.valueOf(courseRoomLabel.getText());
-						if(!courseAbsencesLabel.getText().equals(""))
-							absences = Integer.valueOf(courseAbsencesLabel.getText());
-							
-						Course course = new Course(teacherLabel.getText(), courseNameLabel.getText(), 
-								room, absences, 0, courseTimeLabel.getText());
-						
-						
-						database.insertCourse(course);
-						List<Double> weights = getLabelWeights();
-						
-						database.insertWeights(weights, courseNameLabel.getText());
-							
-						// UPDATE THE LISTVIEW TO INCLUDE THE NEW COURSE
-						courseListView.getItems().add(course);
-						courseListView.refresh();
-							
-						}
 				} catch (NumberFormatException e) {
 					e.printStackTrace();
 				} catch (ClassNotFoundException e) {
@@ -118,7 +137,16 @@ public class CourseViewController implements Initializable {
 					
 			}
 	}
-
+	// Animates the update label to confirm changes have been made
+	private void animateUpdateLabel(){
+		FadeTransition ft = new FadeTransition(Duration.millis(1000), updatedLabel);
+		ft.setFromValue(0.0);
+		ft.setToValue(1.0);
+		ft.setCycleCount(2);
+		ft.setAutoReverse(true);
+		ft.play();
+	}
+	// Get the decimal value of the weight percentages
 	private List<Double> getLabelWeights() {
 		List<Double> weights = new ArrayList<>();
 		weights.add(Double.valueOf(hwWeightLabel.getText()) / 100);
@@ -136,38 +164,73 @@ public class CourseViewController implements Initializable {
 	
 	@FXML
 	void onUpdateButtonClick(ActionEvent event){
-		Course course = courseListView.getSelectionModel().getSelectedItem();
-		String oldName = course.getName();
-		course.setName(courseNameLabel.getText());
-		course.setInstructor(teacherLabel.getText());
-		course.setClassTime(courseTimeLabel.getText());
-		course.setAbsences(Integer.valueOf(courseAbsencesLabel.getText()));
-		course.setRoomNumber(Integer.valueOf(courseRoomLabel.getText()));
-		course.setFinalGrade(0.0);
-		
-		List<Double> weights = getLabelWeights();
-		
-		courseListView.refresh();
-		
-		try {
-			database.updateCourse(course);
-			database.updateWeightCourse(oldName, course.getName());
+		if(courseNameLabel.getText().equals("")){
+			updatedLabel.setText("No input Given");
+			animateUpdateLabel();
+		}else{
+			Course course = courseListView.getSelectionModel().getSelectedItem();
+			String oldName = course.getName();
+			course.setName(courseNameLabel.getText());
+			course.setInstructor(teacherLabel.getText());
+			course.setClassTime(courseTimeLabel.getText());
+			course.setAbsences(Integer.valueOf(courseAbsencesLabel.getText()));
+			course.setRoomNumber(Integer.valueOf(courseRoomLabel.getText()));
+			course.setFinalGrade(0.0);
 			
-			database.updateWeightByCourse(weights, course.getName());
-			System.out.println(course.getName() + " Updated");
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			List<Double> weights = getLabelWeights();
+			
+			courseListView.refresh();
+			
+			try {
+				database.updateCourse(course);
+				database.updateWeightCourse(oldName, course.getName());
+				database.updateWeightByCourse(weights, course.getName());
+				updatedLabel.setText("Updated");
+				animateUpdateLabel();
+				System.out.println(course.getName() + " Updated");
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	  
 	}
 	
 	@FXML
 	void onDeleteButtonClick(ActionEvent event){
-		
+		if(courseNameLabel.getText().equals("")){
+			updatedLabel.setText("No input Given");
+			animateUpdateLabel();
+		}
+		else{
+			try {
+				if(database.hasCourse(courseNameLabel.getText())){
+					
+					Alert deleteAlert = new Alert(AlertType.CONFIRMATION, "Confirm Delete?");
+					Optional<ButtonType> resultDelete = deleteAlert.showAndWait();
+					if (resultDelete.isPresent() && resultDelete.get() == ButtonType.OK) {
+						database.deleteCourse(courseNameLabel.getText());
+						database.deleteWeight(courseNameLabel.getText());
+						updatedLabel.setText("Course Deleted");
+						animateUpdateLabel();
+						clearFields();
+						courseListView.getItems().remove(courseListView.getSelectionModel().getSelectedIndex());
+						courseListView.refresh();
+					}
+				}
+				else{
+					updatedLabel.setText("Course not found");
+					animateUpdateLabel();
+				}
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	@Override
@@ -269,7 +332,6 @@ public class CourseViewController implements Initializable {
 				}
 				if(num != 0){
 					progress = (typeWeight) * (sum/num);
-					System.out.println(progress + " = " + typeWeight + " * " + sum + " / " + num);
 				}
 				return progress;
 			}
