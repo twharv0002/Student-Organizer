@@ -27,7 +27,10 @@
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" SplitPane.resizableWithParent="false">
                            <children>
                               <ListView fx:id="list" layoutX="-34.0" layoutY="34.0" prefHeight="616.0" prefWidth="238.0" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="34.0" />
-                              <Label layoutX="93.0" layoutY="4.0" prefHeight="31.0" prefWidth="53.0" text="Courses" />
+                              <Label alignment="CENTER" layoutX="83.0" layoutY="3.0" prefHeight="31.0" prefWidth="72.0" text="Courses">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font></Label>
                            </children>
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
@@ -61,19 +64,25 @@
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font></Label>
-                              <TextField fx:id="startSearchTextField" layoutX="522.0" layoutY="6.0" />
-                              <Button fx:id="startSearchButton" layoutX="462.0" layoutY="6.0" mnemonicParsing="false" onAction="#searchButtonOnClick" prefHeight="31.0" prefWidth="39.0">
+                              <TextField fx:id="startSearchTextField" layoutX="469.0" layoutY="7.0" />
+                              <Button fx:id="startSearchButton" layoutX="422.0" layoutY="7.0" mnemonicParsing="false" onAction="#searchButtonOnClick" prefHeight="31.0" prefWidth="39.0" />
+                              <Button fx:id="upcomingButton" layoutX="120.0" layoutY="6.0" mnemonicParsing="false" onAction="#onUpcomingButtonClick" text="Upcoming" />
+                              <Button fx:id="allButton" layoutX="219.0" layoutY="6.0" mnemonicParsing="false" onAction="#onAllButtonClick" text="All" />
+                              <CheckBox fx:id="showCompleteRadioButton" layoutX="264.0" layoutY="11.0" mnemonicParsing="false" onAction="#onRadioButtonClick" text="Show Completed" wrapText="true" />
+                              <ImageView layoutX="430.0" layoutY="10.0" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../bin/assets/Find.png" />
+                                 </image>
+                              </ImageView>
+                              <Button fx:id="refreshButton" layoutX="667.0" layoutY="6.0" mnemonicParsing="false" onAction="#onRefreshButtonClick" prefHeight="31.0" prefWidth="42.0">
                                  <graphic>
-                                    <ImageView preserveRatio="true">
+                                    <ImageView>
                                        <image>
-                                          <Image url="@../bin/assets/Find.png" />
+                                          <Image url="@../bin/assets/Refresh.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
                               </Button>
-                              <Button fx:id="upcomingButton" layoutX="142.0" layoutY="8.0" mnemonicParsing="false" onAction="#onUpcomingButtonClick" text="Upcoming" />
-                              <Button fx:id="allButton" layoutX="247.0" layoutY="8.0" mnemonicParsing="false" onAction="#onAllButtonClick" text="All" />
-                              <CheckBox fx:id="showCompleteRadioButton" layoutX="307.0" layoutY="11.0" mnemonicParsing="false" onAction="#onRadioButtonClick" text="Show Completed" wrapText="true" />
                            </children>
                         </AnchorPane>
                     </items>

@@ -30,14 +30,18 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Skin;
 import javafx.scene.effect.Glow;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import jfxtras.internal.scene.control.skin.agenda.AgendaMonthSkin;
@@ -128,10 +132,7 @@ public class ScheduleViewController implements Initializable {
 			if(!myAppointment.isWholeDay()){
 				content += "\nTime: " + myAppointment.getStartLocalDateTime().format(DateTimeFormatter.ISO_LOCAL_TIME) + " - " + myAppointment.getEndLocalDateTime().format(DateTimeFormatter.ISO_LOCAL_TIME);
 			}
-			// This section explains how to change the color of an appointment
-//			System.out.println(myAppointment.getAppointmentGroup().getStyleClass());
-//			myAppointment.setAppointmentGroup(agenda.appointmentGroups().get(0));
-//			agenda.refresh();
+			
 			deleteAlert.setContentText(content);
 			if(myAppointment != null){
 				deleteAlert.showAndWait();
@@ -246,7 +247,7 @@ public class ScheduleViewController implements Initializable {
 					.withAppointmentGroup(new Agenda.AppointmentGroupImpl().withStyleClass(rs.getString("style"))));
 		}
 	}
-	// Test for GitHub on the small-features branch
+	// Test EGit with small-features
 	private void addAppointmentsToData() throws ClassNotFoundException, SQLException {
 		for (int i = 0; i < assignments.size(); i++) {
 			

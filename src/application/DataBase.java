@@ -392,7 +392,18 @@ public class DataBase {
 		Statement state = con.createStatement();
 		String sql = "DELETE FROM courses WHERE name='" + name + "'";
 		state.executeUpdate(sql);
-		System.out.println(name + " was deleted");
+		System.out.println(name + " was deleted from courses");
+	}
+	
+	public void deleteWeight(String name) throws SQLException, ClassNotFoundException{
+		if(con == null){
+			getConnection();
+		}
+		
+		Statement state = con.createStatement();
+		String sql = "DELETE FROM weights WHERE name='" + name + "'";
+		state.executeUpdate(sql);
+		System.out.println(name + " was deleted from weights");
 	}
 	
 	public void deleteAssignment(int id) throws ClassNotFoundException, SQLException{
@@ -403,7 +414,7 @@ public class DataBase {
 		Statement state = con.createStatement();
 		String sql = "DELETE FROM assignments WHERE id='" + id + "'";
 		state.executeUpdate(sql);
-		System.out.println("deleted");
+		System.out.println("Deleted " + id);
 	}
 	
 	// Get all grades

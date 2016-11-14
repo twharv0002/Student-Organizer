@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import javafx.animation.FadeTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -35,6 +36,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -47,6 +49,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.Duration;
 
 public class AssignmentViewController implements Initializable{
 	
@@ -68,6 +71,8 @@ public class AssignmentViewController implements Initializable{
 	@FXML CheckBox completedCheckBox;
 	@FXML CheckBox detailsCompletedCheckBox;
 	@FXML ListView<Assignment> assignmentListView;
+	@FXML Label updatedLabel;
+	
 	private List<Assignment> assignments = new ArrayList<>();
 	private List<Assignment> searchAssignments = new ArrayList<>();
 	ObservableList<Assignment> name;
@@ -77,6 +82,7 @@ public class AssignmentViewController implements Initializable{
 	public void initialize(URL location, ResourceBundle resources) {
 		database = new DataBase();
 		String[] types = {"", "Homework", "Quiz", "Lab","Test","Final","Paper","Discussion", "Project"};
+		assignmentListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		
 		try {
 			typeComboBox.getItems().addAll(types);
@@ -331,6 +337,13 @@ public class AssignmentViewController implements Initializable{
 		try {
 			database.updateAssignment(assignment);
 			System.out.println("Assignment Updated");
+			FadeTransition ft = new FadeTransition(Duration.millis(1000), updatedLabel);
+			ft.setFromValue(0.0);
+			ft.setToValue(1.0);
+			ft.setCycleCount(2);
+			ft.setAutoReverse(true);
+			ft.play();
+			
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -340,25 +353,38 @@ public class AssignmentViewController implements Initializable{
 	
 	@FXML
 	void onDeleteButtonClick(ActionEvent event){
-		Alert deleteAlert = new Alert(AlertType.CONFIRMATION, "Confirm Delete?");
 		Alert chooseAlert = new Alert(AlertType.WARNING, "Choose an assignment to delete");
 		chooseAlert.setHeaderText("No Assignment Selected");
-		Assignment ass = assignmentListView.getSelectionModel().getSelectedItem();
-		if(ass != null){
-			Optional<ButtonType> resultDelete = deleteAlert.showAndWait();
-			if (resultDelete.isPresent() && resultDelete.get() == ButtonType.OK) {
-				try {
-					database.deleteAssignment(ass.getId());
-					updateAssignmentList();
-				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			 }
+		if(assignmentListView.getSelectionModel().equals(null)){
+			chooseAlert.showAndWait();
 		}
 		else{
-			chooseAlert.showAndWait();
+			try{
+			String names = "\n";
+			int selectedItemsCount = assignmentListView.getSelectionModel().getSelectedItems().size();
+			for (int i = 0; i < selectedItemsCount; i++) {
+				names += assignmentListView.getSelectionModel().getSelectedItems().get(i).getName() + "\n";
+			}
+			
+			Alert deleteAlert = new Alert(AlertType.CONFIRMATION, "Selected Items:" + names);
+			deleteAlert.setHeaderText("Confirm Delete");
+			Optional<ButtonType> resultDelete = deleteAlert.showAndWait();
+			List<Assignment> selectedItems = assignmentListView.getSelectionModel().getSelectedItems();
+			
+			if (resultDelete.isPresent() && resultDelete.get() == ButtonType.OK){
+				for (int i = 0; i < selectedItemsCount; i++) {		
+					Assignment ass = selectedItems.get(i);					
+					database.deleteAssignment(ass.getId());
+				}
+			}
+			
+			updateAssignmentList(selectedItems);
+			
+			}catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -367,9 +393,9 @@ public class AssignmentViewController implements Initializable{
 		displayNewAssignmentPopUp();
 	}
 	
-	private void updateAssignmentList() throws ClassNotFoundException, SQLException{
+	private void updateAssignmentList(List<Assignment> assignments) throws ClassNotFoundException, SQLException{
 		getAssignments();
-		assignmentListView.getItems().remove(assignmentListView.getSelectionModel().getSelectedIndex());
+		assignmentListView.getItems().removeAll(assignments);
 		assignmentListView.refresh();
 	}
 	
