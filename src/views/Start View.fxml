@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="startPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="804.0" prefWidth="969.0" styleClass="table" stylesheets="@../styles/StudentOrganizer.css" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainController">
+   <children>
+      <TabPane layoutY="112.0" prefHeight="692.0" prefWidth="969.0" style="-fx-background-color: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="112.0">
+         <tabs>
+            <Tab closable="false" text="Home">
+               <content>
+                 <fx:include fx:id="homeTab" source="homeTab.fxml" />
+               </content>
+            </Tab>
+            <Tab closable="false" text="Schedule">
+              <content>
+                <fx:include fx:id="scheduleTab" source="scheduleTab.fxml" />
+              </content>
+            </Tab>
+            <Tab closable="false" text="Assignments">
+               <content>
+                  <fx:include fx:id="assignmentTab" source="assignmentTab.fxml" />
+               </content>
+            </Tab>
+            <Tab closable="false" text="Courses">
+              <content>
+                <fx:include fx:id="courseTab" source="courseTab.fxml" />
+              </content>
+            </Tab>
+         </tabs>
+         <effect>
+            <InnerShadow />
+         </effect>
+      </TabPane>
+      <AnchorPane fx:id="imagePane" prefHeight="114.0" prefWidth="969.0" styleClass="backgroundImage" stylesheets="@../styles/StudentOrganizer.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <effect>
+            <InnerShadow choke="0.27" radius="18.552500000000002" width="55.21" />
+         </effect>
+      </AnchorPane>
+     
+   </children>
+</AnchorPane>

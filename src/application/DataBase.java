@@ -1,19 +1,15 @@
 package application;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.ArrayList;
 import java.util.List;
 
-import jfxtras.scene.control.agenda.Agenda;
+import assignment.Assignment;
+import course.Course;
 import jfxtras.scene.control.agenda.Agenda.Appointment;
 
 public class DataBase {
@@ -42,18 +38,16 @@ public class DataBase {
 	private void createTable(String tableName, String createTableQuery) throws SQLException{
 		Statement state = con.createStatement();
 		ResultSet res = state.executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='" + tableName + "';");
-		if( !res.next() ){
+		if(!res.next()){
 			System.out.println("Building the " + tableName + " table");
 			Statement state2 = con.createStatement();
 			state2.execute(createTableQuery);
-			
-			
 		}
 	}
 	
 	// Check if database and associated tables exists, create them otherwise
 	private void initialize() throws SQLException {
-		if( !hasData ){
+		if(!hasData){
 			hasData = true;
 		
 			createTable("assignments", "CREATE TABLE assignments(id integer,"
@@ -114,13 +108,13 @@ public class DataBase {
 		}
 		
 		PreparedStatement prep = con.prepareStatement("INSERT INTO assignments values (?,?,?,?,?,?,?,?);");
-		prep.setString(2, assignment.getName());
-		prep.setDate(3, assignment.getDate());
-		prep.setDouble(4, assignment.getGrade());
-		prep.setBoolean(5, assignment.isComplete());
-		prep.setString(6, assignment.getInfo());
-		prep.setString(7, assignment.getClassName());
-		prep.setString(8, assignment.getType());
+		prep.setString(2, assignment.getSpec().getName());
+		prep.setDate(3, assignment.getSpec().getDate());
+		prep.setDouble(4, assignment.getSpec().getGrade());
+		prep.setBoolean(5, assignment.getSpec().isComplete());
+		prep.setString(6, assignment.getSpec().getInfo());
+		prep.setString(7, assignment.getSpec().getClassName());
+		prep.setString(8, assignment.getSpec().getType().toString());
 		prep.execute();
 		
 	}
@@ -282,13 +276,13 @@ public class DataBase {
 		
 		PreparedStatement prep = con.prepareStatement("UPDATE assignments SET name=?, date=?, grade=?,"
 				+ " completed=?, info=?, class=?, type=? WHERE id=?;");
-		prep.setString(1, assignment.getName());
-		prep.setDate(2, assignment.getDate());
-		prep.setDouble(3, assignment.getGrade());
-		prep.setBoolean(4, assignment.isComplete());
-		prep.setString(5, assignment.getInfo());
-		prep.setString(6, assignment.getClassName());
-		prep.setString(7, assignment.getType());
+		prep.setString(1, assignment.getSpec().getName());
+		prep.setDate(2, assignment.getSpec().getDate());
+		prep.setDouble(3, assignment.getSpec().getGrade());
+		prep.setBoolean(4, assignment.getSpec().isComplete());
+		prep.setString(5, assignment.getSpec().getInfo());
+		prep.setString(6, assignment.getSpec().getClassName());
+		prep.setString(7, assignment.getSpec().getType().toString());
 		prep.setInt(8, assignment.getId());
 		prep.execute();
  	}
