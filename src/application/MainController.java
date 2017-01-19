@@ -11,8 +11,6 @@ public class MainController {
 	@FXML private AssignmentTabController assignmentTabController;
 	@FXML private ScheduleTabController scheduleTabController;
 	@FXML private CourseTabController courseTabController;
-	
-	
 
 	@FXML private void initialize() {
 		homeTabController.init(this);
