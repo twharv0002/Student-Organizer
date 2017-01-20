@@ -1,6 +1,5 @@
 package assignment;
 
-import java.awt.DisplayMode;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
@@ -8,7 +7,6 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
-import application.AddAssignmentPopUp;
 import application.DataBase;
 import application.FadeLabel;
 import application.Main;

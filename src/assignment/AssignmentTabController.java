@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import application.AddAssignmentPopUp;
 import application.FadeLabel;
 import application.MainController;
 import course.Course;
