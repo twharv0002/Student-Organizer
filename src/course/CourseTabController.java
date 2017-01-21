@@ -65,7 +65,8 @@ public class CourseTabController implements Initializable {
 			public void changed(ObservableValue<? extends Course> observable, Course oldValue,
 					Course newValue) {
 				if(newValue != null){
-					setWeightLabels((String)newValue.getData().getProperty("name"));
+					//setWeightLabels((String)newValue.getData().getProperty("name"));
+					setWeightLabels(newValue);
 					setGeneralSectionLabels(newValue);
 					setCourseSectionLabels(newValue);
 					setProgressGridPaneValues(newValue);
@@ -101,18 +102,16 @@ public class CourseTabController implements Initializable {
 				
 	}
 
-	private void setWeightLabels(String course){
-		List<String> weights = courseModel.getWeights(course);
-		
-		hwWeightLabel.setText(weights.get(0));
-		quizWeightLabel.setText(weights.get(1));
-		labWeightLabel.setText(weights.get(2));
-		testWeightLabel.setText(weights.get(3));
-		finalWeightLabel.setText(weights.get(4));
-		paperWeightLabel.setText(weights.get(5));
-		projectWeightLabel.setText(weights.get(6));
-		attendanceWeightLabel.setText(weights.get(7));
-		discussionWeightLabel.setText(weights.get(8));
+	private void setWeightLabels(Course course){
+		hwWeightLabel.setText(String.valueOf(course.getWeights().get("homework") * 100));
+		quizWeightLabel.setText(String.valueOf(course.getWeights().get("quiz") * 100));
+		labWeightLabel.setText(String.valueOf(course.getWeights().get("lab") * 100));
+		testWeightLabel.setText(String.valueOf(course.getWeights().get("test") * 100));
+		finalWeightLabel.setText(String.valueOf(course.getWeights().get("final") * 100));
+		paperWeightLabel.setText(String.valueOf(course.getWeights().get("paper") * 100));
+		projectWeightLabel.setText(String.valueOf(course.getWeights().get("project") * 100));
+		attendanceWeightLabel.setText(String.valueOf(course.getWeights().get("attendance") * 100));
+		discussionWeightLabel.setText(String.valueOf(course.getWeights().get("discussion") * 100));
 	}
 
 	@FXML

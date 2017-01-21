@@ -78,24 +78,6 @@ public class CourseModel {
 		}
 	}
 	
-	public List<String> getWeights(String course){
-		List<String> weights = new ArrayList<>();
-		try {
-			ResultSet rs = database.getTypeWeightByCourse(course);
-			
-			while(rs.next()){
-				addWeightsFromResultSet(rs, weights);
-			}
-			
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return weights;
-	}
-	
 	public Map<String, Double> getWeightsFromDb(String course){
 		Map<String, Double> weights = new HashMap<>();
 		try {
@@ -121,18 +103,6 @@ public class CourseModel {
 		}
 		
 		return weights;
-	}
-
-	private void addWeightsFromResultSet(ResultSet rs, List<String> weights) throws SQLException {
-		weights.add(String.valueOf(rs.getDouble("homework") * 100));
-		weights.add(String.valueOf(rs.getDouble("quiz") * 100));
-		weights.add(String.valueOf(rs.getDouble("lab") * 100));
-		weights.add(String.valueOf(rs.getDouble("test") * 100));
-		weights.add(String.valueOf(rs.getDouble("final") * 100));
-		weights.add(String.valueOf(rs.getDouble("paper") * 100));
-		weights.add(String.valueOf(rs.getDouble("project") * 100));
-		weights.add(String.valueOf(rs.getDouble("attendance") * 100));
-		weights.add(String.valueOf(rs.getDouble("discussion") * 100));
 	}
 	
 	public void updateCourse(Course course) {
