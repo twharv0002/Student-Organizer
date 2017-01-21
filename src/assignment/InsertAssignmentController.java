@@ -99,7 +99,6 @@ public class InsertAssignmentController implements Initializable {
 				db.insertAssignment(assignment);
 				assignmentCompleteLabel.setText("Assignment Inserted");
 				System.out.println("Assignment Inserted");
-				
 				assignmentCompleteLabel.animate();
 				
 			} catch (ClassNotFoundException e) {
