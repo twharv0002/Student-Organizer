@@ -81,8 +81,7 @@ public class AssignmentTabController implements Initializable{
 
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				System.out.println("changed");
-				
+				search();
 			}
 		});
 		
@@ -200,7 +199,10 @@ public class AssignmentTabController implements Initializable{
 	
 	@FXML
 	void onAssignmentSearchButtonClick(ActionEvent event){
-		
+		search();
+	}
+
+	public void search() {
 		String name = assignmentSearchTextField.getText();
 		String className = courseComboBox.getValue();
 		Type type = typeComboBox.getValue();

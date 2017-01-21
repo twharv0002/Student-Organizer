@@ -48,11 +48,6 @@ public class AssignmentModel {
 				searchAssignments.add(assignment);
 			}
 		}
-		
-		if(searchAssignments.size() == 0){
-			System.out.println("No matches found");
-		}
-		
 		refresh();
 		return searchAssignments;
 	}
