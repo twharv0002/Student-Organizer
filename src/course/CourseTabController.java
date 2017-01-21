@@ -2,7 +2,9 @@ package course;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -65,7 +67,6 @@ public class CourseTabController implements Initializable {
 			public void changed(ObservableValue<? extends Course> observable, Course oldValue,
 					Course newValue) {
 				if(newValue != null){
-					//setWeightLabels((String)newValue.getData().getProperty("name"));
 					setWeightLabels(newValue);
 					setGeneralSectionLabels(newValue);
 					setCourseSectionLabels(newValue);
@@ -146,9 +147,9 @@ public class CourseTabController implements Initializable {
 		}
 		else{
 			Course course = courseModel.addNewCourse(teacherLabel.getText(), courseNameLabel.getText(), 
-					courseRoomLabel.getText(), courseAbsencesLabel.getText(), courseTimeLabel.getText());
+					courseRoomLabel.getText(), courseAbsencesLabel.getText(), courseTimeLabel.getText(), getLabelWeights());
 			displayStatusMessage("Course Added");
-			courseModel.addCourseWeights(getLabelWeights(), (String)course.getData().getProperty("name"));
+			courseModel.addCourseWeights(course);
 			mainController.update();
 			courseListView.getItems().add(course);
 			courseListView.refresh();
@@ -161,7 +162,8 @@ public class CourseTabController implements Initializable {
 		updatedLabel.animate();
 	}
 
-	private List<Double> getLabelWeights() {
+	private List<Double> getLabelWeightsR(){
+		
 		List<Double> weights = new ArrayList<>();
 		weights.add(Double.valueOf(hwWeightLabel.getText()) / 100);
 		weights.add(Double.valueOf(quizWeightLabel.getText()) / 100);
@@ -173,6 +175,22 @@ public class CourseTabController implements Initializable {
 		weights.add(Double.valueOf(projectWeightLabel.getText()) / 100);
 		weights.add(Double.valueOf(attendanceWeightLabel.getText()) / 100);
 		weights.add(0.0);
+		return weights;
+	}
+	
+	private Map<String, Double> getLabelWeights() {
+		
+		Map<String, Double> weights = new HashMap<String, Double>();
+		weights.put("homework", Double.valueOf(hwWeightLabel.getText()) / 100);
+		weights.put("quiz", Double.valueOf(quizWeightLabel.getText()) / 100);
+		weights.put("lab", Double.valueOf(labWeightLabel.getText()) / 100);
+		weights.put("test", Double.valueOf(testWeightLabel.getText()) / 100);
+		weights.put("final", Double.valueOf(finalWeightLabel.getText()) / 100);
+		weights.put("paper", Double.valueOf(paperWeightLabel.getText()) / 100);
+		weights.put("discussion", Double.valueOf(discussionWeightLabel.getText()) / 100);
+		weights.put("project", Double.valueOf(projectWeightLabel.getText()) / 100);
+		weights.put("attendance", Double.valueOf(attendanceWeightLabel.getText()) / 100);
+		weights.put("participation", 0.0);
 		return weights;
 	}
 	
@@ -195,7 +213,7 @@ public class CourseTabController implements Initializable {
 			
 			courseModel.updateCourse(course);
 			mainController.update();
-			courseModel.updateCourseWeights(oldName, (String)course.getData().getProperty("name"), getLabelWeights());
+			courseModel.updateCourseWeights(oldName, (String)course.getData().getProperty("name"), getLabelWeightsR());
 			
 			displayStatusMessage("Updated");
 			

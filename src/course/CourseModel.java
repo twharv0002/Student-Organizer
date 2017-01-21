@@ -40,22 +40,22 @@ public class CourseModel {
 		return false;
 	}
 	
-	public Course addNewCourse(String t, String n, String r, String a, String time){
+	public Course addNewCourse(String instructor, String name, String roomNumber, String a, String time, Map<String, Double> weightValues){
 		int room = 0;
 		int absences = 0;
-		if(!r.equals(""))
-			room = Integer.valueOf(r);
+		if(!roomNumber.equals(""))
+			room = Integer.valueOf(roomNumber);
 		if(!a.equals(""))
 			absences = Integer.valueOf(a);
 		Map<String, Object> map = new HashMap<>();
-		map.put("instructor", t);
-		map.put("name", n);
+		map.put("instructor", instructor);
+		map.put("name", name);
 		map.put("roomNumber", room);
 		map.put("absences", absences);
-		map.put("finalGrade", 0);
+		map.put("finalGrade", 0.0);
 		map.put("time", time);
 		CourseData data = new CourseData(map);
-		Map<String, Double> weights = getWeightsFromDb((String)data.getProperty("name"));
+		Map<String, Double> weights = weightValues;
 		Course course = new Course(data, weights);
 		
 		try {
@@ -68,9 +68,9 @@ public class CourseModel {
 		return course;
 	}
 	
-	public void addCourseWeights(List<Double> weights, String name){
+	public void addCourseWeights(Course course){
 		try {
-			database.insertWeights(weights, name);
+			database.insertWeights(course);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {

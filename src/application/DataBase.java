@@ -185,6 +185,27 @@ public class DataBase {
 		statement.executeUpdate();
 	}
 	
+	// Insert and get methods for weights - Inserts weight into the appropriate type column
+		public void insertWeights(Course course) throws SQLException, ClassNotFoundException{
+			if(con == null){
+				getConnection();
+			}
+			
+			PreparedStatement statement = con.prepareStatement("INSERT INTO weights values(?,?,?,?,?,?,?,?,?,?,?,?);");
+			statement.setString(2, (String)course.getData().getProperty("name"));
+			statement.setDouble(3, (double)course.getWeights().get("homework"));
+			statement.setDouble(4, (double)course.getWeights().get("quiz"));
+			statement.setDouble(5, (double)course.getWeights().get("lab"));
+			statement.setDouble(6, (double)course.getWeights().get("test"));
+			statement.setDouble(7, (double)course.getWeights().get("final"));
+			statement.setDouble(8, (double)course.getWeights().get("paper"));
+			statement.setDouble(9, (double)course.getWeights().get("discussion"));
+			statement.setDouble(10, (double)course.getWeights().get("project"));
+			statement.setDouble(11, (double)course.getWeights().get("attendance"));
+			statement.setDouble(12, (double)course.getWeights().get("participation"));
+			statement.executeUpdate();
+		}
+	
 	public ResultSet getWeights() throws ClassNotFoundException, SQLException{
 		if(con == null){
 			getConnection();
