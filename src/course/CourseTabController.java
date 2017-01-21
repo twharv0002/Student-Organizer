@@ -65,7 +65,7 @@ public class CourseTabController implements Initializable {
 			public void changed(ObservableValue<? extends Course> observable, Course oldValue,
 					Course newValue) {
 				if(newValue != null){
-					setWeightLabels(newValue.getData().getName());
+					setWeightLabels((String)newValue.getData().getProperty("name"));
 					setGeneralSectionLabels(newValue);
 					setCourseSectionLabels(newValue);
 					setProgressGridPaneValues(newValue);
@@ -77,24 +77,24 @@ public class CourseTabController implements Initializable {
 				progressGridPane.getChildren().clear();
 				progressGridPane.add(node, 0, 0);
 				
-				ProgressTable progressTable = new ProgressTable(progressGridPane, newValue.getData().getName());
+				ProgressTable progressTable = new ProgressTable(progressGridPane, (String)newValue.getData().getProperty("name"));
 				progressTable.displayProgress();
 			}
 
 			private void setCourseSectionLabels(Course newValue) {
-				courseNameLabel.setText(newValue.getData().getName());
-				teacherLabel.setText(newValue.getData().getInstructor());
-				courseRoomLabel.setText(String.valueOf(newValue.getData().getRoomNumber()));
-				courseAbsencesLabel.setText(String.valueOf(newValue.getData().getAbsences()));
-				courseTimeLabel.setText(newValue.getData().getClassTime());
+				courseNameLabel.setText((String)newValue.getData().getProperty("name"));
+				teacherLabel.setText((String)newValue.getData().getProperty("instructor"));
+				courseRoomLabel.setText(String.valueOf(newValue.getData().getProperty("roomNumber")));
+				courseAbsencesLabel.setText(String.valueOf(newValue.getData().getProperty("absences")));
+				courseTimeLabel.setText((String)newValue.getData().getProperty("time"));
 			}
 
 			private void setGeneralSectionLabels(Course newValue) {
-				nameLabel.setText(newValue.getData().getName());
-				instructorLabel.setText(newValue.getData().getInstructor());
-				timeLabel.setText(newValue.getData().getClassTime());
-				absencesLabel.setText(String.valueOf(newValue.getData().getAbsences()));
-				roomLabel.setText(String.valueOf(newValue.getData().getRoomNumber()));
+				nameLabel.setText((String)newValue.getData().getProperty("name"));
+				instructorLabel.setText((String)newValue.getData().getProperty("instructor"));
+				timeLabel.setText(String.valueOf(newValue.getData().getProperty("time")));
+				absencesLabel.setText(String.valueOf(newValue.getData().getProperty("absences")));
+				roomLabel.setText((String.valueOf(newValue.getData().getProperty("roomNumber"))));
 			}
 	
 		});
@@ -149,7 +149,7 @@ public class CourseTabController implements Initializable {
 			Course course = courseModel.addNewCourse(teacherLabel.getText(), courseNameLabel.getText(), 
 					courseRoomLabel.getText(), courseAbsencesLabel.getText(), courseTimeLabel.getText());
 			displayStatusMessage("Course Added");
-			courseModel.addCourseWeights(getLabelWeights(), course.getData().getName());
+			courseModel.addCourseWeights(getLabelWeights(), (String)course.getData().getProperty("name"));
 			mainController.update();
 			courseListView.getItems().add(course);
 			courseListView.refresh();
@@ -183,26 +183,25 @@ public class CourseTabController implements Initializable {
 			displayStatusMessage("No Input Given");
 		}else{
 			Course course = courseListView.getSelectionModel().getSelectedItem();
-			String oldName = course.getData().getName();
+			String oldName = (String)course.getData().getProperty("name");
 			
-			course.getData().setName(courseNameLabel.getText());
-			course.getData().setInstructor(teacherLabel.getText());
-			course.getData().setClassTime(courseTimeLabel.getText());
-			course.getData().setAbsences(Integer.valueOf(courseAbsencesLabel.getText()));
-			course.getData().setRoomNumber(Integer.valueOf(courseRoomLabel.getText()));
-			course.getData().setFinalGrade(0.0);
+			course.getData().setProperty("name", courseNameLabel.getText());
+			course.getData().setProperty("instructor", teacherLabel.getText());
+			course.getData().setProperty("time", courseTimeLabel.getText());
+			course.getData().setProperty("absences", Integer.valueOf(courseAbsencesLabel.getText()));
+			course.getData().setProperty("roomNumber", Integer.valueOf(courseRoomLabel.getText()));
+			course.getData().setProperty("finalGrade", 0.0);
 			
 			courseListView.refresh();
 			
 			courseModel.updateCourse(course);
 			mainController.update();
-			courseModel.updateCourseWeights(oldName, course.getData().getName(), getLabelWeights());
+			courseModel.updateCourseWeights(oldName, (String)course.getData().getProperty("name"), getLabelWeights());
 			
 			displayStatusMessage("Updated");
 			
 			courseListView.getSelectionModel().clearSelection();
 			courseListView.getSelectionModel().select(course);
-			System.out.println(course.getData().getName() + " Updated");
 		}
 	  
 	}

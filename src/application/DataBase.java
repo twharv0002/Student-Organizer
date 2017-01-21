@@ -146,12 +146,12 @@ public class DataBase {
 		}
 		
 		PreparedStatement prep = con.prepareStatement("INSERT INTO courses values (?,?,?,?,?,?,?);");
-		prep.setString(2, course.getData().getName());
-		prep.setString(3, course.getData().getInstructor());
-		prep.setString(4, course.getData().getClassTime());
-		prep.setInt(5, course.getData().getAbsences());
-		prep.setInt(6, course.getData().getRoomNumber());
-		prep.setDouble(7, course.getData().getFinalGrade());
+		prep.setString(2, (String)course.getData().getProperty("name"));
+		prep.setString(3, (String)course.getData().getProperty("instructor"));
+		prep.setString(4, (String)course.getData().getProperty("time"));
+		prep.setInt(5, (int)course.getData().getProperty("absences"));
+		prep.setInt(6, (int)course.getData().getProperty("roomNumber"));
+		prep.setDouble(7, (double)course.getData().getProperty("finalGrade"));
 		prep.execute();
 	}
 	
@@ -312,12 +312,12 @@ public class DataBase {
 		
 		PreparedStatement prep = con.prepareStatement("UPDATE courses SET name=?, instructor=?, time=?,"
 				+ " absences=?, roomNumber=?, finalGrade=? WHERE id=?;");
-		prep.setString(1, course.getData().getName());
-		prep.setString(2, course.getData().getInstructor());
-		prep.setString(3, course.getData().getClassTime());
-		prep.setInt(4, course.getData().getAbsences());
-		prep.setInt(5, course.getData().getRoomNumber());
-		prep.setDouble(6, course.getData().getFinalGrade());
+		prep.setString(1, (String)course.getData().getProperty("name"));
+		prep.setString(2, (String)course.getData().getProperty("instructor"));
+		prep.setString(3, (String)course.getData().getProperty("time"));
+		prep.setInt(4, (int)course.getData().getProperty("absences"));
+		prep.setInt(5, (int)course.getData().getProperty("roomNumber"));
+		prep.setDouble(6, (double)course.getData().getProperty("finalGrade"));
 		prep.setInt(7, course.getId());
 		prep.execute();
 	}

@@ -1,5 +1,7 @@
 package course;
 
+import java.util.Map;
+
 public class Course {
 	private CourseData data;
 	private int id;
@@ -13,7 +15,7 @@ public class Course {
 	}
 	
 	public String toString(){
-		return data.getName();
+		return (String)data.getProperty("name");
 	}
 	
 	public int getId(){

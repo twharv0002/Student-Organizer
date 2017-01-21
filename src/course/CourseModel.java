@@ -3,7 +3,9 @@ package course;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import application.DataBase;
 import javafx.collections.FXCollections;
@@ -31,7 +33,7 @@ public class CourseModel {
 	
 	public boolean hasCourse(String name){
 		for (int i = 0; i < dataCourse.size(); i++) {
-			if(dataCourse.get(i).getData().getName().equals(name))
+			if(dataCourse.get(i).getData().getProperty("name").toString().equals(name))
 				return true;
 		}
 		
@@ -45,7 +47,14 @@ public class CourseModel {
 			room = Integer.valueOf(r);
 		if(!a.equals(""))
 			absences = Integer.valueOf(a);
-		CourseData data = new CourseData(t, n, room, absences, 0, time);	
+		Map map = new HashMap<>();
+		map.put("instructor", t);
+		map.put("name", n);
+		map.put("roomNumber", room);
+		map.put("absences", absences);
+		map.put("finalGrade", 0);
+		map.put("time", time);
+		CourseData data = new CourseData(map);
 		Course course = new Course(data);
 		
 		try {
@@ -182,8 +191,14 @@ public class CourseModel {
 		try {
 			rs = database.getCourses();
 			while(rs.next()){
-				CourseData data = new CourseData(rs.getString("instructor"), rs.getString("name"), rs.getInt("roomNumber"),
-						rs.getInt("absences"), rs.getDouble("finalGrade"), rs.getString("time"));
+				Map map = new HashMap<>();
+				map.put("instructor", rs.getString("instructor"));
+				map.put("name", rs.getString("name"));
+				map.put("roomNumber", rs.getInt("roomNumber"));
+				map.put("absences", rs.getInt("absences"));
+				map.put("finalGrade", rs.getDouble("finalGrade"));
+				map.put("time", rs.getString("time"));
+				CourseData data = new CourseData(map);
 				Course course = new Course(data);
 				dataCourse.add(course);
 			}
