@@ -65,7 +65,7 @@ public class CourseTabController implements Initializable {
 			public void changed(ObservableValue<? extends Course> observable, Course oldValue,
 					Course newValue) {
 				if(newValue != null){
-					setWeightLabels(newValue.getName());
+					setWeightLabels(newValue.getData().getName());
 					setGeneralSectionLabels(newValue);
 					setCourseSectionLabels(newValue);
 					setProgressGridPaneValues(newValue);
@@ -77,24 +77,24 @@ public class CourseTabController implements Initializable {
 				progressGridPane.getChildren().clear();
 				progressGridPane.add(node, 0, 0);
 				
-				ProgressTable progressTable = new ProgressTable(progressGridPane, newValue.getName());
+				ProgressTable progressTable = new ProgressTable(progressGridPane, newValue.getData().getName());
 				progressTable.displayProgress();
 			}
 
 			private void setCourseSectionLabels(Course newValue) {
-				courseNameLabel.setText(newValue.getName());
-				teacherLabel.setText(newValue.getInstructor());
-				courseRoomLabel.setText(String.valueOf(newValue.getRoomNumber()));
-				courseAbsencesLabel.setText(String.valueOf(newValue.getAbsences()));
-				courseTimeLabel.setText(newValue.getClassTime());
+				courseNameLabel.setText(newValue.getData().getName());
+				teacherLabel.setText(newValue.getData().getInstructor());
+				courseRoomLabel.setText(String.valueOf(newValue.getData().getRoomNumber()));
+				courseAbsencesLabel.setText(String.valueOf(newValue.getData().getAbsences()));
+				courseTimeLabel.setText(newValue.getData().getClassTime());
 			}
 
 			private void setGeneralSectionLabels(Course newValue) {
-				nameLabel.setText(newValue.getName());
-				instructorLabel.setText(newValue.getInstructor());
-				timeLabel.setText(newValue.getClassTime());
-				absencesLabel.setText(String.valueOf(newValue.getAbsences()));
-				roomLabel.setText(String.valueOf(newValue.getRoomNumber()));
+				nameLabel.setText(newValue.getData().getName());
+				instructorLabel.setText(newValue.getData().getInstructor());
+				timeLabel.setText(newValue.getData().getClassTime());
+				absencesLabel.setText(String.valueOf(newValue.getData().getAbsences()));
+				roomLabel.setText(String.valueOf(newValue.getData().getRoomNumber()));
 			}
 	
 		});
@@ -149,7 +149,7 @@ public class CourseTabController implements Initializable {
 			Course course = courseModel.addNewCourse(teacherLabel.getText(), courseNameLabel.getText(), 
 					courseRoomLabel.getText(), courseAbsencesLabel.getText(), courseTimeLabel.getText());
 			displayStatusMessage("Course Added");
-			courseModel.addCourseWeights(getLabelWeights(), course.getName());
+			courseModel.addCourseWeights(getLabelWeights(), course.getData().getName());
 			mainController.update();
 			courseListView.getItems().add(course);
 			courseListView.refresh();
@@ -183,26 +183,26 @@ public class CourseTabController implements Initializable {
 			displayStatusMessage("No Input Given");
 		}else{
 			Course course = courseListView.getSelectionModel().getSelectedItem();
-			String oldName = course.getName();
+			String oldName = course.getData().getName();
 			
-			course.setName(courseNameLabel.getText());
-			course.setInstructor(teacherLabel.getText());
-			course.setClassTime(courseTimeLabel.getText());
-			course.setAbsences(Integer.valueOf(courseAbsencesLabel.getText()));
-			course.setRoomNumber(Integer.valueOf(courseRoomLabel.getText()));
-			course.setFinalGrade(0.0);
+			course.getData().setName(courseNameLabel.getText());
+			course.getData().setInstructor(teacherLabel.getText());
+			course.getData().setClassTime(courseTimeLabel.getText());
+			course.getData().setAbsences(Integer.valueOf(courseAbsencesLabel.getText()));
+			course.getData().setRoomNumber(Integer.valueOf(courseRoomLabel.getText()));
+			course.getData().setFinalGrade(0.0);
 			
 			courseListView.refresh();
 			
 			courseModel.updateCourse(course);
 			mainController.update();
-			courseModel.updateCourseWeights(oldName, course.getName(), getLabelWeights());
+			courseModel.updateCourseWeights(oldName, course.getData().getName(), getLabelWeights());
 			
 			displayStatusMessage("Updated");
 			
 			courseListView.getSelectionModel().clearSelection();
 			courseListView.getSelectionModel().select(course);
-			System.out.println(course.getName() + " Updated");
+			System.out.println(course.getData().getName() + " Updated");
 		}
 	  
 	}

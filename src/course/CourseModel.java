@@ -31,7 +31,7 @@ public class CourseModel {
 	
 	public boolean hasCourse(String name){
 		for (int i = 0; i < dataCourse.size(); i++) {
-			if(dataCourse.get(i).getName().equals(name))
+			if(dataCourse.get(i).getData().getName().equals(name))
 				return true;
 		}
 		
@@ -45,8 +45,8 @@ public class CourseModel {
 			room = Integer.valueOf(r);
 		if(!a.equals(""))
 			absences = Integer.valueOf(a);
-			
-		Course course = new Course(t, n, room, absences, 0, time);
+		CourseData data = new CourseData(t, n, room, absences, 0, time);	
+		Course course = new Course(data);
 		
 		try {
 			database.insertCourse(course);
@@ -182,8 +182,9 @@ public class CourseModel {
 		try {
 			rs = database.getCourses();
 			while(rs.next()){
-				Course course = new Course(rs.getString("instructor"), rs.getString("name"), rs.getInt("roomNumber"),
+				CourseData data = new CourseData(rs.getString("instructor"), rs.getString("name"), rs.getInt("roomNumber"),
 						rs.getInt("absences"), rs.getDouble("finalGrade"), rs.getString("time"));
+				Course course = new Course(data);
 				dataCourse.add(course);
 			}
 		} catch (ClassNotFoundException e) {
