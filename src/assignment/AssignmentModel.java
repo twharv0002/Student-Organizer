@@ -49,6 +49,10 @@ public class AssignmentModel {
 			}
 		}
 		
+		if(searchAssignments.size() == 0){
+			System.out.println("No matches found");
+		}
+		
 		refresh();
 		return searchAssignments;
 	}
