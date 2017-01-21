@@ -40,7 +40,7 @@ import schedule.ScheduleModel;
 public class HomeTabController implements Initializable{
 	
 	private DataBase database;
-	private ObservableList<Assignment> data = FXCollections.observableArrayList();
+	private ObservableList<AssignmentSpec> data = FXCollections.observableArrayList();
 	private List<Assignment> assignments = new ArrayList<Assignment>();
 	private List<TableCheckBox> checkBoxes = new ArrayList<>();
 	private Agenda agenda;
@@ -51,14 +51,14 @@ public class HomeTabController implements Initializable{
 	private MainController mainController;
 
 	@FXML ListView<Course> list;
-	@FXML TableView<Assignment> table;
+	@FXML TableView<AssignmentSpec> table;
 	@FXML Label displayedIssueLabel;
 	@FXML TextArea descriptionValue;
-	@FXML TableColumn<Assignment, String> columnName;
-	@FXML TableColumn<Assignment, Date> columnDate;
-	@FXML TableColumn<Assignment, String> columnCourse;
-	@FXML TableColumn<Assignment, Integer> columnDaysUntil;
-	@FXML TableColumn<Assignment, Boolean> columnCompleted;
+	@FXML TableColumn<AssignmentSpec, String> columnName;
+	@FXML TableColumn<AssignmentSpec, Date> columnDate;
+	@FXML TableColumn<AssignmentSpec, String> columnCourse;
+	@FXML TableColumn<AssignmentSpec, Integer> columnDaysUntil;
+	@FXML TableColumn<AssignmentSpec, Boolean> columnCompleted;
 	@FXML TextField startSearchTextField;
 	@FXML Button startSearchButton;
 	@FXML Button upcomingButton;
@@ -117,24 +117,28 @@ public class HomeTabController implements Initializable{
 
 	private void populateAssignmentsTableView() throws ClassNotFoundException, SQLException {
 		assignments = ah.getUpcomingAssignments();
-		data.addAll(assignments);
+		List<AssignmentSpec> specs = new ArrayList<>();
+		for (Assignment assignment : assignments) {
+			specs.add(assignment.getSpec());
+		}
+		data.addAll(specs);
 		table.setItems(data);
 		table.getColumns().setAll(columnName, columnCourse, columnDate, columnDaysUntil, columnCompleted);
 		
 	}
 
 	private void initializeColumnCellFactories() {
-		columnName.setCellValueFactory(new PropertyValueFactory<Assignment, String>("name"));
-		columnDate.setCellValueFactory(new PropertyValueFactory<Assignment, Date>("date"));
-		columnCourse.setCellValueFactory(new PropertyValueFactory<Assignment, String>("className"));
-		columnDaysUntil.setCellValueFactory(new PropertyValueFactory<Assignment, Integer>("daysUntil"));
-		columnCompleted.setCellValueFactory(new PropertyValueFactory<Assignment, Boolean>("Complete"));
+		columnName.setCellValueFactory(new PropertyValueFactory<AssignmentSpec, String>("name"));
+		columnDate.setCellValueFactory(new PropertyValueFactory<AssignmentSpec, Date>("date"));
+		columnCourse.setCellValueFactory(new PropertyValueFactory<AssignmentSpec, String>("className"));
+		columnDaysUntil.setCellValueFactory(new PropertyValueFactory<AssignmentSpec, Integer>("daysUntil"));
+		columnCompleted.setCellValueFactory(new PropertyValueFactory<AssignmentSpec, Boolean>("Complete"));
 
 		// Create a checkbox in the completed column
-		columnCompleted.setCellFactory(new Callback<TableColumn<Assignment, Boolean>, TableCell<Assignment, Boolean>>() {
+		columnCompleted.setCellFactory(new Callback<TableColumn<AssignmentSpec, Boolean>, TableCell<AssignmentSpec, Boolean>>() {
 			@Override
-			public TableCell<Assignment, Boolean> call(TableColumn<Assignment, Boolean> param){
-				TableCell<Assignment, Boolean> cell = new TableCell<Assignment, Boolean>(){
+			public TableCell<AssignmentSpec, Boolean> call(TableColumn<AssignmentSpec, Boolean> param){
+				TableCell<AssignmentSpec, Boolean> cell = new TableCell<AssignmentSpec, Boolean>(){
 					@Override
 					protected void updateItem(Boolean item, boolean empty){
 						if(item != null){
@@ -158,10 +162,10 @@ public class HomeTabController implements Initializable{
 	        if (event.getSource() instanceof CheckBox) {
 	            TableCheckBox chk = (TableCheckBox) event.getSource();
 	            boolean value = chk.isSelected();
-	            Assignment ass = table.getItems().get(chk.getIndex());
+	            AssignmentSpec ass = table.getItems().get(chk.getIndex());
 	            try {
-					database.updateCompleted(ass.getSpec().getName(), value);
-					ass.getSpec().setComplete(value);
+					database.updateCompleted(ass.getName(), value);
+					ass.setComplete(value);
 					if(value == true){
 						table.getItems().remove(ass);
 						table.getItems().remove(chk);
@@ -172,7 +176,7 @@ public class HomeTabController implements Initializable{
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
-	            System.out.println("Updated " + ass.getSpec().getName() + " to " + value );
+	            System.out.println("Updated " + ass.getName() + " to " + value );
 	        }
 	    }
 	};
@@ -230,7 +234,7 @@ public class HomeTabController implements Initializable{
 	}
 
 	private void addNewTableItems(int i) {
-		table.getItems().add(assignments.get(i));
+		table.getItems().add(assignments.get(i).getSpec());
 		table.refresh();
 	}
 	

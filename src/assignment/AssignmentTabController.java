@@ -258,6 +258,7 @@ public class AssignmentTabController implements Initializable{
 			for (int i = 0; i < assignmentListView.getSelectionModel().getSelectedItems().size(); i++) {		
 				Assignment ass = selectedItems.get(i);		
 				assignmentModel.deleteAssignment(ass.getId());
+				mainController.update();
 			}
 		}
 		else
