@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 import application.DataBase;
 import application.FadeLabel;
 import application.Main;
+import application.MainController;
 import course.Course;
 import course.CourseModel;
 import javafx.collections.ObservableList;
@@ -22,6 +23,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
@@ -41,6 +43,9 @@ public class InsertAssignmentController implements Initializable {
 	
 	private CourseModel courseModel;
 	private DataBase db;
+	
+	public MainController mainController;
+	public ListView list;
 	
 	public void display(){
 		final Stage dialog = new Stage();
@@ -98,6 +103,8 @@ public class InsertAssignmentController implements Initializable {
 			try {
 				db.insertAssignment(assignment);
 				assignmentCompleteLabel.setText("Assignment Inserted");
+				//list.getItems().add(assignment);
+				mainController.update();
 				System.out.println("Assignment Inserted");
 				assignmentCompleteLabel.animate();
 				

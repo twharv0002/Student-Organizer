@@ -1,5 +1,6 @@
 package assignment;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -17,8 +18,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -32,8 +35,10 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 public class AssignmentTabController implements Initializable{
@@ -281,10 +286,16 @@ public class AssignmentTabController implements Initializable{
 	}
 
 	@FXML
-	void onNewAssignmentButtonClick(ActionEvent event){
-		//AddAssignmentPopUp popUp = new AddAssignmentPopUp();
-		InsertAssignmentController controller = new InsertAssignmentController();
-		controller.display();
+	void onNewAssignmentButtonClick(ActionEvent event) throws IOException{
+		final Stage dialog = new Stage();
+		FXMLLoader fxmlLoader = new FXMLLoader();
+		fxmlLoader.setLocation(getClass().getResource("/views/insertAssignment.fxml"));
+		AnchorPane frame = fxmlLoader.load();
+		Scene scene = new Scene(frame);
+		InsertAssignmentController controller = (InsertAssignmentController) fxmlLoader.getController();
+		controller.mainController = mainController;
+		dialog.setScene(scene);
+		dialog.show();
 	}
 	
 	public void update(){
