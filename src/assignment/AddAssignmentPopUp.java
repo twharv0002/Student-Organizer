@@ -1,8 +1,8 @@
-package application;
+package assignment;
 
 import java.io.IOException;
 
-import assignment.InsertAssignmentController;
+import application.Main;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
