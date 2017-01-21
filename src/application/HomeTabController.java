@@ -217,8 +217,11 @@ public class HomeTabController implements Initializable{
 	
 	@FXML
 	void onUpcomingButtonClick(ActionEvent event){
+		updateTable();
+	}
+
+	public void updateTable() {
 		assignments.clear();
-		//ah.refresh();
 		assignments.addAll(ah.getUpcomingAssignments());
 		refreshTable();
 		for (int i = 0; i < assignments.size(); i++) {
@@ -251,6 +254,7 @@ public class HomeTabController implements Initializable{
 		list.setItems(ch.getCourses());
 		agenda.appointments().clear();
 		agenda.appointments().addAll(sh.getAppointments());
+		updateTable();
 	}
 	
 	@FXML
