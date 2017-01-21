@@ -45,23 +45,6 @@ public class InsertAssignmentController implements Initializable {
 	private DataBase db;
 	
 	public MainController mainController;
-	public ListView list;
-	
-	public void display(){
-		final Stage dialog = new Stage();
-		Scene scene;
-		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(Main.class.getResource("/views/insertAssignment.fxml"));
-		dialog.initModality(Modality.APPLICATION_MODAL);
-		try {
-			AnchorPane root = (AnchorPane)loader.load();
-			scene = new Scene(root);
-			dialog.setScene(scene);
-			dialog.showAndWait();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -103,7 +86,6 @@ public class InsertAssignmentController implements Initializable {
 			try {
 				db.insertAssignment(assignment);
 				assignmentCompleteLabel.setText("Assignment Inserted");
-				//list.getItems().add(assignment);
 				mainController.update();
 				System.out.println("Assignment Inserted");
 				assignmentCompleteLabel.animate();

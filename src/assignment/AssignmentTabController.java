@@ -300,6 +300,9 @@ public class AssignmentTabController implements Initializable{
 	
 	public void update(){
 		setCourseComboBox();
+		assignmentListView.getItems().clear();
+		assignmentListView.getItems().addAll(assignmentModel.getAssignmentMasterList());
+		assignmentListView.refresh();
 	}
 
 	public void init(MainController mainController) {
