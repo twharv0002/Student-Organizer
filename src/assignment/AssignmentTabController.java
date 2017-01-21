@@ -45,7 +45,6 @@ import javafx.util.Callback;
 public class AssignmentTabController implements Initializable{
 	
 	@FXML Button newAssignmentButton;
-	@FXML Button assignmentSearchButton;
 	@FXML Button updateButton;
 	@FXML Button deleteButton;
 	@FXML TextField assignmentSearchTextField;
@@ -212,11 +211,6 @@ public class AssignmentTabController implements Initializable{
 		});
 		
 		assignmentListView.setItems(name);
-	}
-	
-	@FXML
-	void onAssignmentSearchButtonClick(ActionEvent event){
-		search();
 	}
 
 	public void search() {
