@@ -17,6 +17,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -77,12 +78,12 @@ public class AssignmentTabController implements Initializable{
 		initComboBoxes();
 		populateListView();
 		
-		assignmentSearchTextField.textProperty().addListener(new ChangeListener<String>() {
-
-			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				search();
-			}
+		assignmentSearchTextField.textProperty().addListener((event) -> {
+			search();
+		});
+		
+		courseComboBox.setOnAction((event) -> {
+			search();
 		});
 		
 		assignmentListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Assignment>() {
