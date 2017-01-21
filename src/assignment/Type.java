@@ -2,7 +2,7 @@ package assignment;
 
 public enum Type {
 	BLANK(""), HOMEWORK("Homework"), QUIZ("Quiz"), TEST("Test"), PAPER("Paper"), LAB("Lab"), FINAL("Final"),
-	DISCUSSION("Discussion"), PROJECT("Project");
+	DISCUSSION("Discussion"), PROJECT("Project"), ATTENDANCE("Attendance");
 	
 	private String name;
 	

@@ -321,8 +321,7 @@ public class AssignmentTabController implements Initializable{
 	}
 	
 	public void update(){
-		// Temporarily disabling the action listener for the course combo box
-		courseComboBox.setOnAction(null);
+		courseComboBox.setOnAction(null); // Temporarily disabling the action listener for the course combo box
 		setCourseComboBox();
 		courseComboBox.setOnAction((event)->{ search(); });
 		assignmentListView.getItems().clear();

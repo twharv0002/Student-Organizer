@@ -6,6 +6,7 @@ import java.util.List;
 
 import assignment.Assignment;
 import assignment.AssignmentModel;
+import assignment.Type;
 import course.CourseModel;
 import javafx.geometry.HPos;
 import javafx.scene.control.Label;
@@ -97,14 +98,14 @@ public class ProgressTable {
 		GridPane.setHalignment(label, HPos.CENTER);
 	}
 
-	public double calculateProgress(String type, double typeWeight) { 
+	public double calculateProgress(String type, double typeWeight){ 
 		int num = 0;
 		double sum = 0;
 		double progress = 0;
 		List<Assignment> assignmentsFromCourse = assignmentModel.getAssignmentsFromCourse(course); 
 		
 		for (int j = 0; j < assignmentsFromCourse.size(); j++) {
-			if(assignmentsFromCourse.get(j).getSpec().getType().equals(type)){
+			if(assignmentsFromCourse.get(j).getSpec().getType().equals(Type.valueOf(type.toUpperCase()))){
 				sum += assignmentsFromCourse.get(j).getSpec().getGrade();
 				num++;
 			}
