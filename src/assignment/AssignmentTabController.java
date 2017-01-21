@@ -86,6 +86,22 @@ public class AssignmentTabController implements Initializable{
 			search();
 		});
 		
+		typeComboBox.setOnAction((event) -> {
+			search();
+		});
+		
+		dateComboBox.setOnAction((event) -> {
+			search();
+		});
+		
+		gradeComboBox.setOnAction((event) -> {
+			search();
+		});
+		
+		completedCheckBox.setOnAction((event) -> {
+			search();
+		});
+		
 		assignmentListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Assignment>() {
 			@Override
 			public void changed(ObservableValue<? extends Assignment> observable, Assignment oldValue,
