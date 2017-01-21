@@ -25,7 +25,7 @@ public class AssignmentSpec {
 	}
 	
 	public boolean matches(AssignmentSpec searchSpec, DateOption dateOption, String gradeOption){
-		if(!(searchSpec.getName().equals("") || getName().equals(searchSpec.getName()))){
+		if(!(searchSpec.getName().equals("") || getName().toLowerCase().equals(searchSpec.getName().toLowerCase()))){
 			return false;
 		}
 		if(!(searchSpec.getClassName().equals("") || getClassName().equals(searchSpec.getClassName()))){
