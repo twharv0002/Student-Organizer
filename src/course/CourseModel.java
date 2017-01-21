@@ -55,7 +55,8 @@ public class CourseModel {
 		map.put("finalGrade", 0);
 		map.put("time", time);
 		CourseData data = new CourseData(map);
-		Course course = new Course(data);
+		Map<String, Double> weights = getWeightsFromDb((String)data.getProperty("name"));
+		Course course = new Course(data, weights);
 		
 		try {
 			database.insertCourse(course);
@@ -84,6 +85,33 @@ public class CourseModel {
 			
 			while(rs.next()){
 				addWeightsFromResultSet(rs, weights);
+			}
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return weights;
+	}
+	
+	public Map<String, Double> getWeightsFromDb(String course){
+		Map<String, Double> weights = new HashMap<>();
+		try {
+			ResultSet rs = database.getTypeWeightByCourse(course);
+			
+			while(rs.next()){
+				weights.put("homework", rs.getDouble("homework"));
+				weights.put("quiz", rs.getDouble("quiz"));
+				weights.put("lab", rs.getDouble("lab"));
+				weights.put("test", rs.getDouble("test"));
+				weights.put("final", rs.getDouble("final"));
+				weights.put("paper", rs.getDouble("paper"));
+				weights.put("discussion", rs.getDouble("discussion"));
+				weights.put("project", rs.getDouble("project"));
+				weights.put("attendance", rs.getDouble("attendance"));
+				weights.put("participation", rs.getDouble("participation"));
 			}
 			
 		} catch (ClassNotFoundException e) {
@@ -190,7 +218,7 @@ public class CourseModel {
 		ResultSet rs;
 		try {
 			rs = database.getCourses();
-			while(rs.next()){
+			while(rs.next()){		
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("instructor", rs.getString("instructor"));
 				map.put("name", rs.getString("name"));
@@ -199,7 +227,8 @@ public class CourseModel {
 				map.put("finalGrade", rs.getDouble("finalGrade"));
 				map.put("time", rs.getString("time"));
 				CourseData data = new CourseData(map);
-				Course course = new Course(data);
+				Map<String, Double> weights = getWeightsFromDb((String)data.getProperty("name"));		
+				Course course = new Course(data, weights);
 				dataCourse.add(course);
 			}
 		} catch (ClassNotFoundException e) {
