@@ -1,7 +1,5 @@
 package course;
 
-import java.util.Map;
-
 public class Course {
 	private CourseData data;
 	private int id;

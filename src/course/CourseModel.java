@@ -47,7 +47,7 @@ public class CourseModel {
 			room = Integer.valueOf(r);
 		if(!a.equals(""))
 			absences = Integer.valueOf(a);
-		Map map = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		map.put("instructor", t);
 		map.put("name", n);
 		map.put("roomNumber", room);
@@ -191,7 +191,7 @@ public class CourseModel {
 		try {
 			rs = database.getCourses();
 			while(rs.next()){
-				Map map = new HashMap<>();
+				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("instructor", rs.getString("instructor"));
 				map.put("name", rs.getString("name"));
 				map.put("roomNumber", rs.getInt("roomNumber"));
