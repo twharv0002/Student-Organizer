@@ -77,6 +77,15 @@ public class AssignmentTabController implements Initializable{
 		initComboBoxes();
 		populateListView();
 		
+		assignmentSearchTextField.textProperty().addListener(new ChangeListener<String>() {
+
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				System.out.println("changed");
+				
+			}
+		});
+		
 		assignmentListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Assignment>() {
 			@Override
 			public void changed(ObservableValue<? extends Assignment> observable, Assignment oldValue,
