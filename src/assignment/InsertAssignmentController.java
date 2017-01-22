@@ -47,7 +47,7 @@ public class InsertAssignmentController implements Initializable {
 		int i = 0;
 		while(i < courses.size() ){
 			Course course = courses.get(i);
-			classComboBox.getItems().add(course.getName());
+			classComboBox.getItems().add((String)course.getData().getProperty("name"));
 			i++;
 		}
 		typeCombo.getItems().addAll(Type.values());

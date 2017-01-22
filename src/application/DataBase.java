@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Map;
 
 import assignment.Assignment;
 import course.Course;
@@ -146,12 +147,12 @@ public class DataBase {
 		}
 		
 		PreparedStatement prep = con.prepareStatement("INSERT INTO courses values (?,?,?,?,?,?,?);");
-		prep.setString(2, course.getName());
-		prep.setString(3, course.getInstructor());
-		prep.setString(4, course.getClassTime());
-		prep.setInt(5, course.getAbsences());
-		prep.setInt(6, course.getRoomNumber());
-		prep.setDouble(7, course.getFinalGrade());
+		prep.setString(2, (String)course.getData().getProperty("name"));
+		prep.setString(3, (String)course.getData().getProperty("instructor"));
+		prep.setString(4, (String)course.getData().getProperty("time"));
+		prep.setInt(5, (int)course.getData().getProperty("absences"));
+		prep.setInt(6, (int)course.getData().getProperty("roomNumber"));
+		prep.setDouble(7, (double)course.getData().getProperty("finalGrade"));
 		prep.execute();
 	}
 	
@@ -184,6 +185,27 @@ public class DataBase {
 		statement.setDouble(12, weights.get(9));
 		statement.executeUpdate();
 	}
+	
+	// Insert and get methods for weights - Inserts weight into the appropriate type column
+		public void insertWeights(Course course) throws SQLException, ClassNotFoundException{
+			if(con == null){
+				getConnection();
+			}
+			
+			PreparedStatement statement = con.prepareStatement("INSERT INTO weights values(?,?,?,?,?,?,?,?,?,?,?,?);");
+			statement.setString(2, (String)course.getData().getProperty("name"));
+			statement.setDouble(3, (double)course.getWeights().get("homework"));
+			statement.setDouble(4, (double)course.getWeights().get("quiz"));
+			statement.setDouble(5, (double)course.getWeights().get("lab"));
+			statement.setDouble(6, (double)course.getWeights().get("test"));
+			statement.setDouble(7, (double)course.getWeights().get("final"));
+			statement.setDouble(8, (double)course.getWeights().get("paper"));
+			statement.setDouble(9, (double)course.getWeights().get("discussion"));
+			statement.setDouble(10, (double)course.getWeights().get("project"));
+			statement.setDouble(11, (double)course.getWeights().get("attendance"));
+			statement.setDouble(12, (double)course.getWeights().get("participation"));
+			statement.executeUpdate();
+		}
 	
 	public ResultSet getWeights() throws ClassNotFoundException, SQLException{
 		if(con == null){
@@ -312,12 +334,12 @@ public class DataBase {
 		
 		PreparedStatement prep = con.prepareStatement("UPDATE courses SET name=?, instructor=?, time=?,"
 				+ " absences=?, roomNumber=?, finalGrade=? WHERE id=?;");
-		prep.setString(1, course.getName());
-		prep.setString(2, course.getInstructor());
-		prep.setString(3, course.getClassTime());
-		prep.setInt(4, course.getAbsences());
-		prep.setInt(5, course.getRoomNumber());
-		prep.setDouble(6, course.getFinalGrade());
+		prep.setString(1, (String)course.getData().getProperty("name"));
+		prep.setString(2, (String)course.getData().getProperty("instructor"));
+		prep.setString(3, (String)course.getData().getProperty("time"));
+		prep.setInt(4, (int)course.getData().getProperty("absences"));
+		prep.setInt(5, (int)course.getData().getProperty("roomNumber"));
+		prep.setDouble(6, (double)course.getData().getProperty("finalGrade"));
 		prep.setInt(7, course.getId());
 		prep.execute();
 	}
@@ -332,22 +354,22 @@ public class DataBase {
 		state.executeUpdate(sql);
 	}
 	
-	public void updateWeightByCourse(List<Double> weights, String course) throws ClassNotFoundException, SQLException{
+	public void updateWeightByCourse(Map<String, Double> weights, String course) throws ClassNotFoundException, SQLException{
 		if(con == null){
 			getConnection();
 		}
 		
 		PreparedStatement prep = con.prepareStatement("UPDATE weights SET homework=?, quiz=?,"
 				+ " lab=?, test=?, final=?, paper=?, discussion=?, project=?, attendance=? WHERE name=?;");
-		prep.setDouble(1, weights.get(0));
-		prep.setDouble(2, weights.get(1));
-		prep.setDouble(3, weights.get(2));
-		prep.setDouble(4, weights.get(3));
-		prep.setDouble(5, weights.get(4));
-		prep.setDouble(6, weights.get(5));
-		prep.setDouble(7, weights.get(6));
-		prep.setDouble(8, weights.get(7));
-		prep.setDouble(9, weights.get(8));
+		prep.setDouble(1, weights.get("homework"));
+		prep.setDouble(2, weights.get("quiz"));
+		prep.setDouble(3, weights.get("lab"));
+		prep.setDouble(4, weights.get("test"));
+		prep.setDouble(5, weights.get("final"));
+		prep.setDouble(6, weights.get("paper"));
+		prep.setDouble(7, weights.get("discussion"));
+		prep.setDouble(8, weights.get("project"));
+		prep.setDouble(9, weights.get("attendance"));
 		prep.setString(10, course);
 		prep.execute();
 		System.out.println("Executed");

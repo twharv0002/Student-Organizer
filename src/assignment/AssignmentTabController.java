@@ -171,8 +171,8 @@ public class AssignmentTabController implements Initializable{
 		
 		courseComboBox.getItems().add("");
 		for (int i = 0; i < courses.size(); i++) {
-			courseComboBox.getItems().add(courses.get(i).getName());
-			classComboBox.getItems().add(courses.get(i).getName());
+			courseComboBox.getItems().add((String)courses.get(i).getData().getProperty("name"));
+			classComboBox.getItems().add((String)courses.get(i).getData().getProperty("name"));
 		}
 		courseComboBox.getSelectionModel().select(0);
 	}

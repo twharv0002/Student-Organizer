@@ -2,7 +2,9 @@ package course;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -65,7 +67,7 @@ public class CourseTabController implements Initializable {
 			public void changed(ObservableValue<? extends Course> observable, Course oldValue,
 					Course newValue) {
 				if(newValue != null){
-					setWeightLabels(newValue.getName());
+					setWeightLabels(newValue);
 					setGeneralSectionLabels(newValue);
 					setCourseSectionLabels(newValue);
 					setProgressGridPaneValues(newValue);
@@ -77,42 +79,40 @@ public class CourseTabController implements Initializable {
 				progressGridPane.getChildren().clear();
 				progressGridPane.add(node, 0, 0);
 				
-				ProgressTable progressTable = new ProgressTable(progressGridPane, newValue.getName());
+				ProgressTable progressTable = new ProgressTable(progressGridPane, (String)newValue.getData().getProperty("name"));
 				progressTable.displayProgress();
 			}
 
 			private void setCourseSectionLabels(Course newValue) {
-				courseNameLabel.setText(newValue.getName());
-				teacherLabel.setText(newValue.getInstructor());
-				courseRoomLabel.setText(String.valueOf(newValue.getRoomNumber()));
-				courseAbsencesLabel.setText(String.valueOf(newValue.getAbsences()));
-				courseTimeLabel.setText(newValue.getClassTime());
+				courseNameLabel.setText((String)newValue.getData().getProperty("name"));
+				teacherLabel.setText((String)newValue.getData().getProperty("instructor"));
+				courseRoomLabel.setText(String.valueOf(newValue.getData().getProperty("roomNumber")));
+				courseAbsencesLabel.setText(String.valueOf(newValue.getData().getProperty("absences")));
+				courseTimeLabel.setText((String)newValue.getData().getProperty("time"));
 			}
 
 			private void setGeneralSectionLabels(Course newValue) {
-				nameLabel.setText(newValue.getName());
-				instructorLabel.setText(newValue.getInstructor());
-				timeLabel.setText(newValue.getClassTime());
-				absencesLabel.setText(String.valueOf(newValue.getAbsences()));
-				roomLabel.setText(String.valueOf(newValue.getRoomNumber()));
+				nameLabel.setText((String)newValue.getData().getProperty("name"));
+				instructorLabel.setText((String)newValue.getData().getProperty("instructor"));
+				timeLabel.setText(String.valueOf(newValue.getData().getProperty("time")));
+				absencesLabel.setText(String.valueOf(newValue.getData().getProperty("absences")));
+				roomLabel.setText((String.valueOf(newValue.getData().getProperty("roomNumber"))));
 			}
 	
 		});
 				
 	}
 
-	private void setWeightLabels(String course){
-		List<String> weights = courseModel.getWeights(course);
-		
-		hwWeightLabel.setText(weights.get(0));
-		quizWeightLabel.setText(weights.get(1));
-		labWeightLabel.setText(weights.get(2));
-		testWeightLabel.setText(weights.get(3));
-		finalWeightLabel.setText(weights.get(4));
-		paperWeightLabel.setText(weights.get(5));
-		projectWeightLabel.setText(weights.get(6));
-		attendanceWeightLabel.setText(weights.get(7));
-		discussionWeightLabel.setText(weights.get(8));
+	private void setWeightLabels(Course course){
+		hwWeightLabel.setText(String.valueOf(course.getWeights().get("homework") * 100));
+		quizWeightLabel.setText(String.valueOf(course.getWeights().get("quiz") * 100));
+		labWeightLabel.setText(String.valueOf(course.getWeights().get("lab") * 100));
+		testWeightLabel.setText(String.valueOf(course.getWeights().get("test") * 100));
+		finalWeightLabel.setText(String.valueOf(course.getWeights().get("final") * 100));
+		paperWeightLabel.setText(String.valueOf(course.getWeights().get("paper") * 100));
+		projectWeightLabel.setText(String.valueOf(course.getWeights().get("project") * 100));
+		attendanceWeightLabel.setText(String.valueOf(course.getWeights().get("attendance") * 100));
+		discussionWeightLabel.setText(String.valueOf(course.getWeights().get("discussion") * 100));
 	}
 
 	@FXML
@@ -147,9 +147,9 @@ public class CourseTabController implements Initializable {
 		}
 		else{
 			Course course = courseModel.addNewCourse(teacherLabel.getText(), courseNameLabel.getText(), 
-					courseRoomLabel.getText(), courseAbsencesLabel.getText(), courseTimeLabel.getText());
+					courseRoomLabel.getText(), courseAbsencesLabel.getText(), courseTimeLabel.getText(), getLabelWeights());
 			displayStatusMessage("Course Added");
-			courseModel.addCourseWeights(getLabelWeights(), course.getName());
+			courseModel.addCourseWeights(course);
 			mainController.update();
 			courseListView.getItems().add(course);
 			courseListView.refresh();
@@ -161,19 +161,20 @@ public class CourseTabController implements Initializable {
 		updatedLabel.setText(status);
 		updatedLabel.animate();
 	}
-
-	private List<Double> getLabelWeights() {
-		List<Double> weights = new ArrayList<>();
-		weights.add(Double.valueOf(hwWeightLabel.getText()) / 100);
-		weights.add(Double.valueOf(quizWeightLabel.getText()) / 100);
-		weights.add(Double.valueOf(labWeightLabel.getText()) / 100);
-		weights.add(Double.valueOf(testWeightLabel.getText()) / 100);
-		weights.add(Double.valueOf(finalWeightLabel.getText()) / 100);
-		weights.add(Double.valueOf(paperWeightLabel.getText()) / 100);
-		weights.add(Double.valueOf(discussionWeightLabel.getText()) / 100);
-		weights.add(Double.valueOf(projectWeightLabel.getText()) / 100);
-		weights.add(Double.valueOf(attendanceWeightLabel.getText()) / 100);
-		weights.add(0.0);
+	
+	private Map<String, Double> getLabelWeights() {
+		
+		Map<String, Double> weights = new HashMap<String, Double>();
+		weights.put("homework", Double.valueOf(hwWeightLabel.getText()) / 100);
+		weights.put("quiz", Double.valueOf(quizWeightLabel.getText()) / 100);
+		weights.put("lab", Double.valueOf(labWeightLabel.getText()) / 100);
+		weights.put("test", Double.valueOf(testWeightLabel.getText()) / 100);
+		weights.put("final", Double.valueOf(finalWeightLabel.getText()) / 100);
+		weights.put("paper", Double.valueOf(paperWeightLabel.getText()) / 100);
+		weights.put("discussion", Double.valueOf(discussionWeightLabel.getText()) / 100);
+		weights.put("project", Double.valueOf(projectWeightLabel.getText()) / 100);
+		weights.put("attendance", Double.valueOf(attendanceWeightLabel.getText()) / 100);
+		weights.put("participation", 0.0);
 		return weights;
 	}
 	
@@ -183,26 +184,24 @@ public class CourseTabController implements Initializable {
 			displayStatusMessage("No Input Given");
 		}else{
 			Course course = courseListView.getSelectionModel().getSelectedItem();
-			String oldName = course.getName();
+			String oldName = (String)course.getData().getProperty("name");
 			
-			course.setName(courseNameLabel.getText());
-			course.setInstructor(teacherLabel.getText());
-			course.setClassTime(courseTimeLabel.getText());
-			course.setAbsences(Integer.valueOf(courseAbsencesLabel.getText()));
-			course.setRoomNumber(Integer.valueOf(courseRoomLabel.getText()));
-			course.setFinalGrade(0.0);
+			course.getData().setProperty("name", courseNameLabel.getText());
+			course.getData().setProperty("instructor", teacherLabel.getText());
+			course.getData().setProperty("time", courseTimeLabel.getText());
+			course.getData().setProperty("absences", Integer.valueOf(courseAbsencesLabel.getText()));
+			course.getData().setProperty("roomNumber", Integer.valueOf(courseRoomLabel.getText()));
+			course.getData().setProperty("finalGrade", 0.0);
 			
 			courseListView.refresh();
-			
 			courseModel.updateCourse(course);
+			courseModel.updateCourseWeights(oldName, (String)course.getData().getProperty("name"), getLabelWeights());
 			mainController.update();
-			courseModel.updateCourseWeights(oldName, course.getName(), getLabelWeights());
-			
+			course.setWeights(getLabelWeights());
 			displayStatusMessage("Updated");
 			
 			courseListView.getSelectionModel().clearSelection();
 			courseListView.getSelectionModel().select(course);
-			System.out.println(course.getName() + " Updated");
 		}
 	  
 	}

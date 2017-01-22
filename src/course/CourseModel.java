@@ -3,7 +3,9 @@ package course;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import application.DataBase;
 import javafx.collections.FXCollections;
@@ -31,22 +33,30 @@ public class CourseModel {
 	
 	public boolean hasCourse(String name){
 		for (int i = 0; i < dataCourse.size(); i++) {
-			if(dataCourse.get(i).getName().equals(name))
+			if(dataCourse.get(i).getData().getProperty("name").toString().equals(name))
 				return true;
 		}
 		
 		return false;
 	}
 	
-	public Course addNewCourse(String t, String n, String r, String a, String time){
+	public Course addNewCourse(String instructor, String name, String roomNumber, String a, String time, Map<String, Double> weightValues){
 		int room = 0;
 		int absences = 0;
-		if(!r.equals(""))
-			room = Integer.valueOf(r);
+		if(!roomNumber.equals(""))
+			room = Integer.valueOf(roomNumber);
 		if(!a.equals(""))
 			absences = Integer.valueOf(a);
-			
-		Course course = new Course(t, n, room, absences, 0, time);
+		Map<String, Object> map = new HashMap<>();
+		map.put("instructor", instructor);
+		map.put("name", name);
+		map.put("roomNumber", room);
+		map.put("absences", absences);
+		map.put("finalGrade", 0.0);
+		map.put("time", time);
+		CourseData data = new CourseData(map);
+		Map<String, Double> weights = weightValues;
+		Course course = new Course(data, weights);
 		
 		try {
 			database.insertCourse(course);
@@ -58,9 +68,9 @@ public class CourseModel {
 		return course;
 	}
 	
-	public void addCourseWeights(List<Double> weights, String name){
+	public void addCourseWeights(Course course){
 		try {
-			database.insertWeights(weights, name);
+			database.insertWeights(course);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -68,13 +78,22 @@ public class CourseModel {
 		}
 	}
 	
-	public List<String> getWeights(String course){
-		List<String> weights = new ArrayList<>();
+	public Map<String, Double> getWeightsFromDb(String course){
+		Map<String, Double> weights = new HashMap<>();
 		try {
 			ResultSet rs = database.getTypeWeightByCourse(course);
 			
 			while(rs.next()){
-				addWeightsFromResultSet(rs, weights);
+				weights.put("homework", rs.getDouble("homework"));
+				weights.put("quiz", rs.getDouble("quiz"));
+				weights.put("lab", rs.getDouble("lab"));
+				weights.put("test", rs.getDouble("test"));
+				weights.put("final", rs.getDouble("final"));
+				weights.put("paper", rs.getDouble("paper"));
+				weights.put("discussion", rs.getDouble("discussion"));
+				weights.put("project", rs.getDouble("project"));
+				weights.put("attendance", rs.getDouble("attendance"));
+				weights.put("participation", rs.getDouble("participation"));
 			}
 			
 		} catch (ClassNotFoundException e) {
@@ -84,18 +103,6 @@ public class CourseModel {
 		}
 		
 		return weights;
-	}
-
-	private void addWeightsFromResultSet(ResultSet rs, List<String> weights) throws SQLException {
-		weights.add(String.valueOf(rs.getDouble("homework") * 100));
-		weights.add(String.valueOf(rs.getDouble("quiz") * 100));
-		weights.add(String.valueOf(rs.getDouble("lab") * 100));
-		weights.add(String.valueOf(rs.getDouble("test") * 100));
-		weights.add(String.valueOf(rs.getDouble("final") * 100));
-		weights.add(String.valueOf(rs.getDouble("paper") * 100));
-		weights.add(String.valueOf(rs.getDouble("project") * 100));
-		weights.add(String.valueOf(rs.getDouble("attendance") * 100));
-		weights.add(String.valueOf(rs.getDouble("discussion") * 100));
 	}
 	
 	public void updateCourse(Course course) {
@@ -108,7 +115,7 @@ public class CourseModel {
 		}	
 	}
 	
-	public void updateCourseWeights(String oldName, String name, List<Double> weights) {
+	public void updateCourseWeights(String oldName, String name, Map<String, Double> weights) {
 		try {
 			database.updateWeightCourse(oldName, name);
 			database.updateWeightByCourse(weights, name);
@@ -181,9 +188,17 @@ public class CourseModel {
 		ResultSet rs;
 		try {
 			rs = database.getCourses();
-			while(rs.next()){
-				Course course = new Course(rs.getString("instructor"), rs.getString("name"), rs.getInt("roomNumber"),
-						rs.getInt("absences"), rs.getDouble("finalGrade"), rs.getString("time"));
+			while(rs.next()){		
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("instructor", rs.getString("instructor"));
+				map.put("name", rs.getString("name"));
+				map.put("roomNumber", rs.getInt("roomNumber"));
+				map.put("absences", rs.getInt("absences"));
+				map.put("finalGrade", rs.getDouble("finalGrade"));
+				map.put("time", rs.getString("time"));
+				CourseData data = new CourseData(map);
+				Map<String, Double> weights = getWeightsFromDb((String)data.getProperty("name"));		
+				Course course = new Course(data, weights);
 				dataCourse.add(course);
 			}
 		} catch (ClassNotFoundException e) {
