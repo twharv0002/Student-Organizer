@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -137,50 +138,12 @@ public class CourseModel {
 		}
 	}
 	
-	public List<String> getWeightLabels(String name){
+	public List<String> getWeightLabels(Course course){
 		List<String> list = new ArrayList<>();
-		
-		try {
-			ResultSet rs = database.getTypeWeightByCourse(name);
-			while(rs.next()){
-				if(rs.getDouble("Homework") > 0){
-					list.add("Homework");
-				}
-				if(rs.getDouble("Test") > 0){
-					list.add("Test");
-				}
-				if(rs.getDouble("Quiz") > 0){
-					list.add("Quiz");
-				}
-				if(rs.getDouble("Lab") > 0){
-					list.add("Lab");
-				}
-				if(rs.getDouble("Final") > 0){
-					list.add("Final");
-				}
-				if(rs.getDouble("Paper") > 0){
-					list.add("Paper");
-				}
-				if(rs.getDouble("Discussion") > 0){
-					list.add("Discussion");
-				}
-				if(rs.getDouble("Project") > 0){
-					list.add("Project");
-				}
-				if(rs.getDouble("Attendance") > 0){
-					list.add("Attendance");
-				}
-				
-				
-			}
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		for(Map.Entry<String, Double> entry : course.getWeights().entrySet()){
+			if(entry.getValue() > 0)
+				list.add(entry.getKey());
 		}
-		
 		return list;
 	}
 	

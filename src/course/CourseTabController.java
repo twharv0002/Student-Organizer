@@ -77,7 +77,7 @@ public class CourseTabController implements Initializable {
 				progressGridPane.getChildren().clear();
 				progressGridPane.add(node, 0, 0);
 				
-				ProgressTable progressTable = new ProgressTable(progressGridPane, (String)newValue.getData().getProperty("name"));
+				ProgressTable progressTable = new ProgressTable(progressGridPane, newValue);
 				progressTable.displayProgress();
 			}
 

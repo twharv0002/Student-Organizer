@@ -7,6 +7,7 @@ import java.util.List;
 import assignment.Assignment;
 import assignment.AssignmentModel;
 import assignment.Type;
+import course.Course;
 import course.CourseModel;
 import javafx.geometry.HPos;
 import javafx.scene.control.Label;
@@ -18,11 +19,11 @@ public class ProgressTable {
 	private CourseModel courseModel;
 	private AssignmentModel assignmentModel;
 	private List<String> weightTypes;
-	private String course;
+	private Course course;
 	private DecimalFormat decimalFormat;
 	private double totalProgress;
 	
-	public ProgressTable(GridPane progressGridPane, String course){
+	public ProgressTable(GridPane progressGridPane, Course course){
 		courseModel = new CourseModel();
 		assignmentModel = new AssignmentModel();
 		this.progressGridPane = progressGridPane;
@@ -49,9 +50,9 @@ public class ProgressTable {
 	private void addDynamicLabelsToGrid() {
 		for (int i = 0; i < weightTypes.size(); i++) {
 			createTypeLabels(weightTypes, i);
-			addWeightLabelToGrid(String.valueOf(courseModel.getWeight(course, weightTypes.get(i))), i);
-			addProgressLabelToGrid(calculateProgress(weightTypes.get(i), courseModel.getWeight(course, weightTypes.get(i))), i);
-			totalProgress += calculateProgress(weightTypes.get(i), courseModel.getWeight(course, weightTypes.get(i)));
+			addWeightLabelToGrid(String.valueOf(course.getWeights().get(weightTypes.get(i))), i);
+			addProgressLabelToGrid(calculateProgress(weightTypes.get(i), course.getWeights().get(weightTypes.get(i))), i);
+			totalProgress += calculateProgress(weightTypes.get(i), course.getWeights().get(weightTypes.get(i)));
 		}
 	}
 
@@ -96,7 +97,7 @@ public class ProgressTable {
 		int num = 0;
 		double sum = 0;
 		double progress = 0;
-		List<Assignment> assignmentsFromCourse = assignmentModel.getAssignmentsFromCourse(course); 
+		List<Assignment> assignmentsFromCourse = assignmentModel.getAssignmentsFromCourse((String)course.getData().getProperty("name")); 
 		
 		for (int j = 0; j < assignmentsFromCourse.size(); j++) {
 			if(assignmentsFromCourse.get(j).getSpec().getType().equals(Type.valueOf(type.toUpperCase()))){
