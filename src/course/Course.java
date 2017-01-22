@@ -16,6 +16,10 @@ public class Course {
 		return weights;
 	}
 	
+	public void setWeights(Map<String, Double> weights){
+		this.weights = weights;
+	}
+	
 	public CourseData getData(){
 		return data;
 	}

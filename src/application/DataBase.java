@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Map;
 
 import assignment.Assignment;
 import course.Course;
@@ -353,22 +354,22 @@ public class DataBase {
 		state.executeUpdate(sql);
 	}
 	
-	public void updateWeightByCourse(List<Double> weights, String course) throws ClassNotFoundException, SQLException{
+	public void updateWeightByCourse(Map<String, Double> weights, String course) throws ClassNotFoundException, SQLException{
 		if(con == null){
 			getConnection();
 		}
 		
 		PreparedStatement prep = con.prepareStatement("UPDATE weights SET homework=?, quiz=?,"
 				+ " lab=?, test=?, final=?, paper=?, discussion=?, project=?, attendance=? WHERE name=?;");
-		prep.setDouble(1, weights.get(0));
-		prep.setDouble(2, weights.get(1));
-		prep.setDouble(3, weights.get(2));
-		prep.setDouble(4, weights.get(3));
-		prep.setDouble(5, weights.get(4));
-		prep.setDouble(6, weights.get(5));
-		prep.setDouble(7, weights.get(6));
-		prep.setDouble(8, weights.get(7));
-		prep.setDouble(9, weights.get(8));
+		prep.setDouble(1, weights.get("homework"));
+		prep.setDouble(2, weights.get("quiz"));
+		prep.setDouble(3, weights.get("lab"));
+		prep.setDouble(4, weights.get("test"));
+		prep.setDouble(5, weights.get("final"));
+		prep.setDouble(6, weights.get("paper"));
+		prep.setDouble(7, weights.get("discussion"));
+		prep.setDouble(8, weights.get("project"));
+		prep.setDouble(9, weights.get("attendance"));
 		prep.setString(10, course);
 		prep.execute();
 		System.out.println("Executed");

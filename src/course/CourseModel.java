@@ -115,7 +115,7 @@ public class CourseModel {
 		}	
 	}
 	
-	public void updateCourseWeights(String oldName, String name, List<Double> weights) {
+	public void updateCourseWeights(String oldName, String name, Map<String, Double> weights) {
 		try {
 			database.updateWeightCourse(oldName, name);
 			database.updateWeightByCourse(weights, name);

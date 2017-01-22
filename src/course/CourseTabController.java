@@ -161,22 +161,6 @@ public class CourseTabController implements Initializable {
 		updatedLabel.setText(status);
 		updatedLabel.animate();
 	}
-
-	private List<Double> getLabelWeightsR(){
-		
-		List<Double> weights = new ArrayList<>();
-		weights.add(Double.valueOf(hwWeightLabel.getText()) / 100);
-		weights.add(Double.valueOf(quizWeightLabel.getText()) / 100);
-		weights.add(Double.valueOf(labWeightLabel.getText()) / 100);
-		weights.add(Double.valueOf(testWeightLabel.getText()) / 100);
-		weights.add(Double.valueOf(finalWeightLabel.getText()) / 100);
-		weights.add(Double.valueOf(paperWeightLabel.getText()) / 100);
-		weights.add(Double.valueOf(discussionWeightLabel.getText()) / 100);
-		weights.add(Double.valueOf(projectWeightLabel.getText()) / 100);
-		weights.add(Double.valueOf(attendanceWeightLabel.getText()) / 100);
-		weights.add(0.0);
-		return weights;
-	}
 	
 	private Map<String, Double> getLabelWeights() {
 		
@@ -210,11 +194,10 @@ public class CourseTabController implements Initializable {
 			course.getData().setProperty("finalGrade", 0.0);
 			
 			courseListView.refresh();
-			
 			courseModel.updateCourse(course);
+			courseModel.updateCourseWeights(oldName, (String)course.getData().getProperty("name"), getLabelWeights());
 			mainController.update();
-			courseModel.updateCourseWeights(oldName, (String)course.getData().getProperty("name"), getLabelWeightsR());
-			
+			course.setWeights(getLabelWeights());
 			displayStatusMessage("Updated");
 			
 			courseListView.getSelectionModel().clearSelection();
