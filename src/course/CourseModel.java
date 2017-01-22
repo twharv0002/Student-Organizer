@@ -14,7 +14,7 @@ import javafx.collections.ObservableList;
 
 public class CourseModel {
 
-	private ObservableList<Course> dataCourse= FXCollections.observableArrayList();
+	private ObservableList<Course> courses= FXCollections.observableArrayList();
 	private DataBase database;
 	
 	public CourseModel(){
@@ -24,17 +24,17 @@ public class CourseModel {
 	
 	public ObservableList<Course> getCourses(){
 		refreshCourseList();
-		return dataCourse;
+		return courses;
 	}
 
 	public void refreshCourseList() {
-		dataCourse.clear();
+		courses.clear();
 		getCoursesFromDB();
 	}
 	
 	public boolean hasCourse(String name){
-		for (int i = 0; i < dataCourse.size(); i++) {
-			if(dataCourse.get(i).getData().getProperty("name").toString().equals(name))
+		for (int i = 0; i < courses.size(); i++) {
+			if(courses.get(i).getData().getProperty("name").toString().equals(name))
 				return true;
 		}
 		
@@ -162,26 +162,13 @@ public class CourseModel {
 				CourseData data = new CourseData(map);
 				Map<String, Double> weights = getWeightsFromDb((String)data.getProperty("name"));		
 				Course course = new Course(data, weights);
-				dataCourse.add(course);
+				courses.add(course);
 			}
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public double getWeight(String name, String type) {
-		double value = 0.0;
-		try {
-			value = database.getTypeWeightByCourse(name).getDouble(type);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return value;
 	}
 	
 }
