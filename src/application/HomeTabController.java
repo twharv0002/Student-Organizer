@@ -77,7 +77,6 @@ public class HomeTabController implements Initializable{
 		database = new DataBase();
 		data = FXCollections.observableArrayList();
 		
-		
 		try {
 			list.setItems(ch.getCourses());
 			initializeColumnCellFactories();

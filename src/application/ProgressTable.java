@@ -54,12 +54,6 @@ public class ProgressTable {
 			totalProgress += calculateProgress(weightTypes.get(i), courseModel.getWeight(course, weightTypes.get(i)));
 		}
 	}
-	
-	private void addLabelToProgressGrid(String name, int column, int row){
-		Label label = new Label(name);
-		progressGridPane.add(label, column, row);
-		GridPane.setHalignment(label, HPos.CENTER);
-	}
 
 	private void addTotalLabelToGrid(){
 		Label totalLabel = new Label("Total");
