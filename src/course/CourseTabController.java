@@ -144,8 +144,10 @@ public class CourseTabController implements Initializable {
 			displayStatusMessage("Course already exists");
 		}
 		else{
-			Course course = courseModel.addNewCourse(teacherLabel.getText(), courseNameLabel.getText(), 
-					courseRoomLabel.getText(), courseAbsencesLabel.getText(), courseTimeLabel.getText(), getLabelWeights());
+			Map<String, Object> map = mapLabelValues();
+			CourseData data = new CourseData(map);
+			Course course = new Course(data, getLabelWeights());
+			courseModel.addNewCourse(course);
 			displayStatusMessage("Course Added");
 			courseModel.addCourseWeights(course);
 			mainController.update();
@@ -153,6 +155,17 @@ public class CourseTabController implements Initializable {
 			courseListView.refresh();
 			courseListView.getSelectionModel().clearAndSelect(courseListView.getItems().size() - 1);
 			}		
+	}
+	
+	private Map<String, Object> mapLabelValues(){
+		Map<String, Object> map = new HashMap<>();
+		map.put("instructor", teacherLabel.getText());
+		map.put("name", courseNameLabel.getText());
+		map.put("roomNumber", courseRoomLabel.getText().equals("") ? 0 : Integer.valueOf(courseRoomLabel.getText()));
+		map.put("absences", courseAbsencesLabel.getText().equals("") ? 0 : Integer.valueOf(courseAbsencesLabel.getText()));
+		map.put("finalGrade", 0.0);
+		map.put("time", courseTimeLabel.getText());
+		return map;
 	}
 
 	private void displayStatusMessage(String status) {

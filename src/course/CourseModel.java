@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -41,24 +40,7 @@ public class CourseModel {
 		return false;
 	}
 	
-	public Course addNewCourse(String instructor, String name, String roomNumber, String a, String time, Map<String, Double> weightValues){
-		int room = 0;
-		int absences = 0;
-		if(!roomNumber.equals(""))
-			room = Integer.valueOf(roomNumber);
-		if(!a.equals(""))
-			absences = Integer.valueOf(a);
-		Map<String, Object> map = new HashMap<>();
-		map.put("instructor", instructor);
-		map.put("name", name);
-		map.put("roomNumber", room);
-		map.put("absences", absences);
-		map.put("finalGrade", 0.0);
-		map.put("time", time);
-		CourseData data = new CourseData(map);
-		Map<String, Double> weights = weightValues;
-		Course course = new Course(data, weights);
-		
+	public void addNewCourse(Course course){
 		try {
 			database.insertCourse(course);
 		} catch (ClassNotFoundException e) {
@@ -66,7 +48,6 @@ public class CourseModel {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return course;
 	}
 	
 	public void addCourseWeights(Course course){
