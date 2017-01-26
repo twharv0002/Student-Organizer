@@ -1,4 +1,4 @@
-package application;
+package course;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -7,8 +7,6 @@ import java.util.List;
 import assignment.Assignment;
 import assignment.AssignmentModel;
 import assignment.Type;
-import course.Course;
-import course.CourseModel;
 import javafx.geometry.HPos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;

@@ -8,7 +8,6 @@ import java.util.ResourceBundle;
 
 import application.FadeLabel;
 import application.MainController;
-import application.ProgressTable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
